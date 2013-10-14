@@ -1,22 +1,20 @@
 package org.shade.time
 
-import org.scalatest.WordSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.mock.MockitoSugar
 import grizzled.slf4j.Logging
-import org.joda.time.DateTimeZone
 
-class ClockSpec extends WordSpec with ShouldMatchers with MockitoSugar with Logging {
+class ClockSpec extends WordSpec with Matchers with MockitoSugar with Logging {
 
   "Calling today" should {
 
     "return the date of 'now' in the supplied timezone" in {
 
-      val utc = DateTimeZone.UTC
-      val london = DateTimeZone.forID("Europe/London")
-      val stockholm = DateTimeZone.forID("Europe/Stockholm")
-      val sydney = DateTimeZone.forID("Australia/Sydney")
-      val honolulu = DateTimeZone.forID("Pacific/Honolulu")
+      val utc = Zone.utc
+      val london = Zone("Europe/London")
+      val stockholm = Zone("Europe/Stockholm")
+      val sydney = Zone("Australia/Sydney")
+      val honolulu = Zone("Pacific/Honolulu")
 
       val clock1 = clock(1375168033370L) // Tue 30 Jul 2013 08:07:13.370 BST
       clock1.today(utc) should equal (Date(2013, 7, 30))
@@ -44,5 +42,4 @@ class ClockSpec extends WordSpec with ShouldMatchers with MockitoSugar with Logg
   def clock(time: Long): Clock = new Clock {
     override val now = Time(time)
   }
-
 }

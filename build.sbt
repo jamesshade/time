@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "org.joda" % "joda-convert" % "1.3.1" withSources() withJavadoc(),
   //
   "junit" % "junit" % "4.10" % "test",
-  "org.scalatest" %% "scalatest" % "1.9.1" % "test" withSources() withJavadoc(),
+  "org.scalatest" %% "scalatest" % "2.0.RC1" % "test" withSources() withJavadoc(),
   "org.mockito" % "mockito-all" % "1.9.0" % "test" withSources() withJavadoc()
 )
 

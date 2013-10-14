@@ -1,8 +1,8 @@
 package org.shade
 
-import org.joda.time.chrono.GregorianChronology
+import org.joda.time.chrono.ISOChronology
 
 package object time {
-
-  private[time] val gregorianUtc = GregorianChronology.getInstanceUTC
+  private[time] val isoUtc = ISOChronology.getInstanceUTC
 }
+

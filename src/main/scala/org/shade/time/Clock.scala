@@ -1,13 +1,12 @@
 package org.shade.time
 
-import org.joda.time.DateTimeZone
 import Date.dateOf
 
 trait Clock {
 
   def now: Time
 
-  final def today(timezone: DateTimeZone) = dateOf(now, timezone)
+  final def today(zone: Zone) = dateOf(now, zone)
 }
 
 object SystemClock extends Clock {

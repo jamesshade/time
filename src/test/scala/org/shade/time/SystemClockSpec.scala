@@ -1,11 +1,11 @@
 package org.shade.time
 
 import org.scalatest.WordSpec
-import org.scalatest.matchers.ShouldMatchers
+import org.scalatest.Matchers
 import org.scalatest.mock.MockitoSugar
 import grizzled.slf4j.Logging
 
-class SystemClockSpec extends WordSpec with ShouldMatchers with MockitoSugar with Logging {
+class SystemClockSpec extends WordSpec with Matchers with MockitoSugar with Logging {
 
   "Calling now" should {
 
