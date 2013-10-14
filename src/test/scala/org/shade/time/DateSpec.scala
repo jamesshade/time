@@ -156,84 +156,84 @@ class DateSpec extends WordSpec with Matchers with MockitoSugar with Logging {
 
       evaluating(Date(2013, 432, 1)) should produce[InvalidDateException]
     }
+  }
 
-    "The joda method" should {
+  "The joda method" should {
 
-      "return the date as a LocalDate (with ISO chronology and UTC zone)" in {
-        Date(2013, 6, 22).joda should equal(new LocalDate(2013, 6, 22, isoUtc))
-        Date(-3424, 12, 31).joda should equal(new LocalDate(-3424, 12, 31, isoUtc))
-        Date(1959, 1, 1).joda should equal(new LocalDate(1959, 1, 1, isoUtc))
-      }
+    "return the date as a LocalDate (with ISO chronology and UTC zone)" in {
+      Date(2013, 6, 22).joda should equal(new LocalDate(2013, 6, 22, isoUtc))
+      Date(-3424, 12, 31).joda should equal(new LocalDate(-3424, 12, 31, isoUtc))
+      Date(1959, 1, 1).joda should equal(new LocalDate(1959, 1, 1, isoUtc))
+    }
+  }
+
+  "Constructing a Date using the Joda-time apply method" should {
+
+    val sydney = Zone("Australia/Sydney")
+
+    "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #1" in {
+      Date(new LocalDate(2013, 4, 22, GregorianChronology.getInstanceUTC)) shouldBe Date(2013, 4, 22)
     }
 
-    "Constructing a Date using the Joda-time apply method" should {
+    "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #2" in {
+      Date(new LocalDate(2013, 4, 22, GregorianChronology.getInstance(sydney.joda, 5))) shouldBe Date(2013, 4, 22)
+    }
 
+    "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #3" in {
+      Date(new LocalDate(2013, 2, 21, GregorianChronology.getInstanceUTC)) shouldBe Date(2013, 2, 21)
+    }
+
+    "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #4" in {
+      Date(new LocalDate(2013, 2, 21, GregorianChronology.getInstance(sydney.joda, 2))) shouldBe Date(2013, 2, 21)
+    }
+
+    "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #5" in {
+      Date(new LocalDate(2013, 4, 22, CopticChronology.getInstanceUTC)) shouldBe Date(2297, 1, 2)
+    }
+
+    "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #6" in {
+      Date(new LocalDate(2013, 4, 22, CopticChronology.getInstance(sydney.joda, 1))) shouldBe Date(2297, 1, 2)
+    }
+
+    "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #7" in {
+      Date(new LocalDate(2013, 2, 21, CopticChronology.getInstanceUTC)) shouldBe Date(2296, 11, 2)
+    }
+
+    "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #8" in {
+      Date(new LocalDate(2013, 2, 21, CopticChronology.getInstance(sydney.joda, 1))) shouldBe Date(2296, 11, 2)
+    }
+  }
+
+  "Constructing a Date using the dateOf method" should {
+
+    "return the correct Date for the time in the supplied Timezone according to ISO Chronology" in {
+
+      val utc = Zone.utc
+      val london = Zone("Europe/London")
+      val stockholm = Zone("Europe/Stockholm")
       val sydney = Zone("Australia/Sydney")
+      val honolulu = Zone("Pacific/Honolulu")
 
-      "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #1" in {
-        Date(new LocalDate(2013, 4, 22, GregorianChronology.getInstanceUTC)) shouldBe Date(2013, 4, 22)
-      }
+      val time1 = Time(1375168033370L) // Tue 30 Jul 2013 08:07:13.370 BST
+      Date dateOf(time1, utc) should equal(Date(2013, 7, 30))
+      dateOf(time1, london) should equal(Date(2013, 7, 30))
+      dateOf(time1, stockholm) should equal(Date(2013, 7, 30))
+      dateOf(time1, sydney) should equal(Date(2013, 7, 30))
+      dateOf(time1, honolulu) should equal(Date(2013, 7, 29))
 
-      "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #2" in {
-        Date(new LocalDate(2013, 4, 22, GregorianChronology.getInstance(sydney.joda, 5))) shouldBe Date(2013, 4, 22)
-      }
+      val time2 = Time(951867000000L) // Tue 29 Feb 2000 23:30:00.000 GMT
+      dateOf(time2, utc) should equal(Date(2000, 2, 29))
+      dateOf(time2, london) should equal(Date(2000, 2, 29))
+      dateOf(time2, stockholm) should equal(Date(2000, 3, 1))
+      dateOf(time2, sydney) should equal(Date(2000, 3, 1))
+      dateOf(time2, honolulu) should equal(Date(2000, 2, 29))
 
-      "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #3" in {
-        Date(new LocalDate(2013, 2, 21, GregorianChronology.getInstanceUTC)) shouldBe Date(2013, 2, 21)
-      }
-
-      "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #4" in {
-        Date(new LocalDate(2013, 2, 21, GregorianChronology.getInstance(sydney.joda, 2))) shouldBe Date(2013, 2, 21)
-      }
-
-      "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #5" in {
-        Date(new LocalDate(2013, 4, 22, CopticChronology.getInstanceUTC)) shouldBe Date(2297, 1, 2)
-      }
-
-      "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #6" in {
-        Date(new LocalDate(2013, 4, 22, CopticChronology.getInstance(sydney.joda, 1))) shouldBe Date(2297, 1, 2)
-      }
-
-      "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #7" in {
-        Date(new LocalDate(2013, 2, 21, CopticChronology.getInstanceUTC)) shouldBe Date(2296, 11, 2)
-      }
-
-      "Create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #8" in {
-        Date(new LocalDate(2013, 2, 21, CopticChronology.getInstance(sydney.joda, 1))) shouldBe Date(2296, 11, 2)
-      }
-    }
-
-    "Constructing a Date using the dateOf method" should {
-
-      "return the correct Date for the time in the supplied Timezone according to ISO Chronology" in {
-
-        val utc = Zone.utc
-        val london = Zone("Europe/London")
-        val stockholm = Zone("Europe/Stockholm")
-        val sydney = Zone("Australia/Sydney")
-        val honolulu = Zone("Pacific/Honolulu")
-
-        val time1 = Time(1375168033370L) // Tue 30 Jul 2013 08:07:13.370 BST
-        Date dateOf(time1, utc) should equal(Date(2013, 7, 30))
-        dateOf(time1, london) should equal(Date(2013, 7, 30))
-        dateOf(time1, stockholm) should equal(Date(2013, 7, 30))
-        dateOf(time1, sydney) should equal(Date(2013, 7, 30))
-        dateOf(time1, honolulu) should equal(Date(2013, 7, 29))
-
-        val time2 = Time(951867000000L) // Tue 29 Feb 2000 23:30:00.000 GMT
-        dateOf(time2, utc) should equal(Date(2000, 2, 29))
-        dateOf(time2, london) should equal(Date(2000, 2, 29))
-        dateOf(time2, stockholm) should equal(Date(2000, 3, 1))
-        dateOf(time2, sydney) should equal(Date(2000, 3, 1))
-        dateOf(time2, honolulu) should equal(Date(2000, 2, 29))
-
-        val time3 = Time(227746800000L) // Mon 21 Mar 1977 00:00:00.000 BST
-        dateOf(time3, utc) should equal(Date(1977, 3, 20))
-        dateOf(time3, london) should equal(Date(1977, 3, 21))
-        dateOf(time3, stockholm) should equal(Date(1977, 3, 21))
-        dateOf(time3, sydney) should equal(Date(1977, 3, 21))
-        dateOf(time3, honolulu) should equal(Date(1977, 3, 20))
-      }
+      val time3 = Time(227746800000L) // Mon 21 Mar 1977 00:00:00.000 BST
+      dateOf(time3, utc) should equal(Date(1977, 3, 20))
+      dateOf(time3, london) should equal(Date(1977, 3, 21))
+      dateOf(time3, stockholm) should equal(Date(1977, 3, 21))
+      dateOf(time3, sydney) should equal(Date(1977, 3, 21))
+      dateOf(time3, honolulu) should equal(Date(1977, 3, 20))
     }
   }
 }
