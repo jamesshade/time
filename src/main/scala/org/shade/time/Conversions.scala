@@ -21,7 +21,7 @@ object Conversions {
 
   implicit def timeToLong(time: Time): Long = time.millis
 
-  implicit def longToTime(time: Long): Time = Time(time)
+  implicit def timeFromLong(time: Long): Time = Time(time)
 
   implicit def timeToJoda(time: Time): DateTime = new DateTime(time.millis, isoUtc)
 
