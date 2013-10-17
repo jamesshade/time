@@ -1,16 +1,27 @@
+/*
+ *  Copyright 2013 James Shade
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package org.shade.time
 
 import org.joda.time.DateTimeZone
-import java.util.TimeZone
 
 // TODO [JJS] TEST ZONE CLASS & OBJECT
 
 final class Zone(val joda: DateTimeZone) {
 
   lazy val id = joda.getID
-
-  lazy val jdk = joda.toTimeZone // TODO [JJS] Review: This is risky - defaults to GMT if the Joda zone ID isn't recognised by the JDK
-    // Can we assert that the returned timezone has the same properties as we expect?
 
   override lazy val toString: String = id
 
@@ -24,25 +35,15 @@ final class Zone(val joda: DateTimeZone) {
 
 object Zone {
 
-  def apply(joda: DateTimeZone) = new Zone(joda)
-
   def apply(id: String): Zone = try {
     new Zone(DateTimeZone.forID(id))
   } catch {
     case e: IllegalArgumentException => throw new InvalidTimezoneException(id, e.getMessage)
   }
 
-  def apply(jdk: TimeZone): Zone = Zone(jdk.getID)
-
-  val utc = Zone(DateTimeZone.UTC)
-
-  // TODO [JJS] REVIEW UNAPPLY METHODS
+  val utc = Zone("UTC")
 
   def unapply(zone: Zone): Option[String] = Option(zone).map(_.id)
-
-//  def unapply(zone: Zone): Option[DateTimeZone] = Option(zone).map(_.joda)
-//
-//  def unapply(zone: Zone): Option[TimeZone] = Some(zone.jdk)
 }
 
 case class InvalidTimezoneException(id: String, message: String) extends RuntimeException(s"Invalid timezone '$id': $message")
