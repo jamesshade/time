@@ -133,7 +133,6 @@ class DateTimeConversionsSpec extends WordSpec with Matchers with MockitoSugar w
 
   "Assigning a Joda LocalDate from a Date" should {
 
-    // TODO [JJS] COMPLETE TEST
     "Produce the right LocalDate with ISO chronology and UTC timezone #1" in {
       val joda: LocalDate = Date(2013, 11, 22)
       joda shouldBe new LocalDate(2013, 11, 22, isoUtc)
