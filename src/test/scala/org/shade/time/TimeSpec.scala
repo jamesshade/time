@@ -3,9 +3,6 @@ package org.shade.time
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.mock.MockitoSugar
 import grizzled.slf4j.Logging
-import org.joda.time.chrono.CopticChronology
-import org.joda.time.{DateMidnight, DateTimeZone, DateTime}
-import java.util.TimeZone
 
 class TimeSpec extends WordSpec with Matchers with MockitoSugar with Logging {
 
@@ -36,58 +33,6 @@ class TimeSpec extends WordSpec with Matchers with MockitoSugar with Logging {
 
     "throw an exception if the time is invalid due to daylight savings time changes in a given zone" in {
       evaluating(Time(2013, 3, 31, 1, 30, 25, 222, Zone("Europe/London"))) should produce [InvalidTimeException]
-    }
-  }
-
-  "The joda apply method" should {
-
-    "return a Joda DateTime object with the correct time with ISO chronology and UTC timezone" in {
-
-      val expected = new DateTime(1231231232L, isoUtc)
-
-      Time(1231231232L).joda shouldBe expected
-    }
-  }
-
-  "The jdk apply method" should {
-
-    "return a java.util.Date object with the correct time" in {
-
-      val expected = new java.util.Date(234242342342L)
-
-      Time(234242342342L).jdk shouldBe expected
-    }
-  }
-
-  "Constructing a Time object from a Joda time instant using the apply method" should {
-
-    "return a Time object representing the same instant for a simply constructed DateTime in system Chronology" in {
-      Time(new DateTime(45345435367L)).millis shouldBe 45345435367L
-      Time(new DateTime(1000L)).millis shouldBe 1000
-    }
-
-    "return a Time object representing the same instant" in {
-      Time(new DateTime(45345435367L, isoUtc)).millis shouldBe 45345435367L
-    }
-
-    "return a Time object representing the same instant for a DateTime in a different chronology and time zone" in {
-      Time(new DateTime(45345435367L, CopticChronology.getInstance(DateTimeZone.forID("Europe/London")))).millis shouldBe 45345435367L
-    }
-
-    "return a Time object representing the same instant for some other ReadableInstant subclass in the PST timezone" in {
-      Time(new DateMidnight(1375080285918L, DateTimeZone.forTimeZone(TimeZone.getTimeZone("PST")))).millis shouldBe 1374994800000L
-    }
-
-    "return a Time object representing the same instant for some other ReadableInstant subclass in the UK timezone" in {
-      Time(new DateMidnight(1375080285918L, DateTimeZone.forID("Europe/London"))).millis shouldBe 1375052400000L
-    }
-  }
-
-  "Constructing a Time object from a JDK java.util.Date using the apply method" should {
-
-    "return a Time object representing the same instant" in {
-      Time(new java.util.Date(45345435367L)).millis shouldBe 45345435367L
-      Time(new java.util.Date(1000L)).millis shouldBe 1000L
     }
   }
 
