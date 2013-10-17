@@ -97,17 +97,17 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar with Logg
     }
 
     "return a Time object representing the same instant for a DateTime in a different chronology and time zone" in {
-      val time = new DateTime(45345435367L, CopticChronology.getInstance(DateTimeZone.forID("Europe/London")))
+      val time: Time = new DateTime(45345435367L, CopticChronology.getInstance(DateTimeZone.forID("Europe/London")))
       time shouldBe Time(45345435367L)
     }
 
     "return a Time object representing the same instant for some other ReadableInstant subclass in the PST timezone" in {
-      val time = new DateMidnight(1375080285918L, DateTimeZone.forTimeZone(TimeZone.getTimeZone("PST")))
+      val time: Time = new DateMidnight(1375080285918L, DateTimeZone.forTimeZone(TimeZone.getTimeZone("PST")))
       time shouldBe Time(1374994800000L)
     }
 
     "return a Time object representing the same instant for some other ReadableInstant subclass in the UK timezone" in {
-      val time = new DateMidnight(1375080285918L, DateTimeZone.forID("Europe/London"))
+      val time: Time = new DateMidnight(1375080285918L, DateTimeZone.forID("Europe/London"))
       time shouldBe Time(1375052400000L)
     }
   }

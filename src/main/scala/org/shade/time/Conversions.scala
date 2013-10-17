@@ -8,7 +8,7 @@ object Conversions {
 
   implicit def longToTime(time: Long): Time = Time(time)
 
-  implicit def timeToJoda(time: Time): DateTime = new DateTime(time, isoUtc)
+  implicit def timeToJoda(time: Time): DateTime = new DateTime(time.millis, isoUtc)
 
   implicit def timeFromJoda(time: ReadableInstant): Time = Time(time.getMillis)
 
