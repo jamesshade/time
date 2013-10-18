@@ -15,13 +15,11 @@
  */
 package org.shade.time
 
-import Date.dateOf
-
 trait Clock {
 
   def now: Time
 
-  final def today(zone: Zone) = dateOf(now, zone)
+  final def today(zone: Zone): Date = Date.dateOf(now, zone)
 }
 
 object SystemClock extends Clock {
