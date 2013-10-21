@@ -21,13 +21,12 @@ The first intention, making time-handling Scala friendly is achieved (or at leas
 
 * Representing Date as a case class containing a year, month and a day
 * Representing Time as a case class containing a Long - milliseconds since the Epoch UTC.
+* Avoid cluttering these classes with unnecessary concerns.  For example, conversion to Joda is provided in a separate Conversions object (JDK conversions perhaps to follow).
 
-The functionality in the classes is intentionally thin.  I'll add functionality as it's needed.  For now easy conversion to Joda and JDK classes is provided.
+The second intention is more tricky, but some points are:
 
-The second is more tricky:
+* Time has no concept of chronology or time zone.  It's an instant in time with a clear definition.  Two times are equal if they represent the same instant (unlike Joda instants, which embed a date time and aren't considered equal even if they represent the same instant - see the differences between equals and isEqual methods in Joda DateTime).  The only place we assume anything about chronology or timezone is in the "toString" method (with displays an ISO8601 version of the Time in the ISO chronology with UTC timezone).
 
-* Time has no concept of chronology or time zone.  It's an instant in time with a clear definition.  Two times are equal if they represent the same instant (unlike Joda instants, which embed a date time and aren't considered equal even if they represent the same instance - see the differences between equals and isEqual methods in Joda DateTime).
-
-* Date necessarily has to have a chronology to be meaningful.  Date represents a date in the ISO chronology. However it has no concept of time zone.  A date is just that - a representation of a day/month/year date.
+* Date has no concept of time zone.  A date is just that - a representation of a day/month/year date in the ISO chronology unattached to any particular location (unfortunately the concept of a "date" has no meaning without chronology - in our case we use the chronology to validate the values in the Date upon construction).
 
 * Any conversions or calculations that are timezone dependent require the zone to be provided, and are generally methods on the Zone class (aside from some specific cases - such as the "today" method on Clock).  There is no "default" or "local" timezone to confuse things - the developer must be specific.
