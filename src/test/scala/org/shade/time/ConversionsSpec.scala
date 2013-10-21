@@ -134,7 +134,7 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "produce the right DateTime with ISO chronology and UTC timezone #2" in {
-      val joda: DateTime = Time(2013, 10, 22, 11, 44, 33, 234, Zone("Europe/London"))
+      val joda: DateTime = Zone("Europe/London")(2013, 10, 22, 11, 44, 33, 234)
       joda should not be new DateTime(2013, 10, 22, 11, 44, 33, 234, DateTimeZone.forID("Europe/London"))
       joda shouldBe new DateTime(2013, 10, 22, 10, 44, 33, 234, isoUtc)
     }

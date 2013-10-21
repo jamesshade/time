@@ -15,9 +15,11 @@
  */
 package org.shade.time
 
-import org.joda.time.DateTimeZone
+import org.joda.time.{DateTime, DateTimeZone}
+import org.joda.time.chrono.ISOChronology
 
 // TODO [JJS] TEST ZONE CLASS & OBJECT
+// TODO [JJS] REMOVE EXPOSURE OF JODA STUFF FROM HERE (in line with Date and Time) (?)
 
 final class Zone(val joda: DateTimeZone) {
 
@@ -31,6 +33,27 @@ final class Zone(val joda: DateTimeZone) {
   }
 
   override lazy val hashCode: Int = id.hashCode
+
+  def apply(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int): Time = {
+    try {
+      Time(new DateTime(year, month, day, hour, minute, second, millisecond, ISOChronology.getInstance(joda)).getMillis)
+    } catch {
+      case cause: Throwable => throw new InvalidTimeException(year, month, day, hour, minute, second, millisecond, this, cause)
+    }
+  }
+
+  def unapply(time: Time): Option[(Int, Int, Int, Int, Int, Int, Int)] = {
+    val zoneTime = timeInZone(time)
+    Some((zoneTime.getYear, zoneTime.getMonthOfYear, zoneTime.getDayOfMonth,
+      zoneTime.getHourOfDay, zoneTime.getMinuteOfHour, zoneTime.getSecondOfMinute, zoneTime.getMillisOfSecond))
+  }
+
+  def dateOf(time: Time): Date = {
+    val instant = timeInZone(time)
+    Date(instant.getYear, instant.getMonthOfYear, instant.getDayOfMonth)
+  }
+  
+  private def timeInZone(time: Time) = new DateTime(time.millis, ISOChronology.getInstance(joda))
 }
 
 object Zone {
@@ -44,6 +67,15 @@ object Zone {
   val utc = Zone("UTC")
 
   def unapply(zone: Zone): Option[String] = Option(zone).map(_.id)
+
+  object Joda {
+    def unapply(zone: Zone): Option[DateTimeZone] = Option(zone).map(_.joda)
+  }
 }
 
 case class InvalidTimezoneException(id: String, message: String) extends RuntimeException(s"Invalid timezone '$id': $message")
+
+case class InvalidTimeException(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int, zone: Zone, cause: Throwable)
+  extends RuntimeException(s"Invalid time: [(Year: $year) (Month: $month) (Day: $day) " +
+    s"(Hour: $hour) (Minute: $minute) (Second: $second) (Millisecond: $millisecond) (Zone: $zone)]: " + cause.getMessage, cause)
+

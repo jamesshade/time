@@ -19,7 +19,7 @@ trait Clock {
 
   def now: Time
 
-  final def today(zone: Zone): Date = Date.dateOf(now, zone)
+  final def today(zone: Zone): Date = zone.dateOf(now)
 }
 
 object SystemClock extends Clock {

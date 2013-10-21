@@ -15,8 +15,7 @@
  */
 package org.shade.time
 
-import org.joda.time.{LocalDate, DateTime}
-import org.joda.time.chrono.ISOChronology
+import org.joda.time.LocalDate
 
 case class Date(year: Int, month: Int, day: Int) {
 
@@ -27,14 +26,6 @@ case class Date(year: Int, month: Int, day: Int) {
   }
 
   override lazy val toString = "%04d-%02d-%02d".format(year, month, day)
-}
-
-object Date {
-
-  def dateOf(time: Time, zone: Zone): Date = {
-    val instant = new DateTime(time.millis, ISOChronology.getInstance(zone.joda))
-    Date(instant.getYear, instant.getMonthOfYear, instant.getDayOfMonth)
-  }
 }
 
 case class InvalidDateException(year: Int, month: Int, day: Int, cause: Throwable)

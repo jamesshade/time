@@ -17,9 +17,6 @@ package org.shade.time
 
 import org.scalatest.{Matchers, WordSpec}
 import org.scalatest.mock.MockitoSugar
-import org.joda.time.chrono.{CopticChronology, GregorianChronology}
-import org.joda.time.LocalDate
-import Date.dateOf
 
 class DateSpec extends WordSpec with Matchers with MockitoSugar {
 
@@ -169,39 +166,6 @@ class DateSpec extends WordSpec with Matchers with MockitoSugar {
       evaluating(Date(2013, 14, 1)) should produce[InvalidDateException]
 
       evaluating(Date(2013, 432, 1)) should produce[InvalidDateException]
-    }
-  }
-
-  "Constructing a Date using the dateOf method" should {
-
-    "return the correct Date for the time in the supplied Timezone according to ISO Chronology" in {
-
-      val utc = Zone.utc
-      val london = Zone("Europe/London")
-      val stockholm = Zone("Europe/Stockholm")
-      val sydney = Zone("Australia/Sydney")
-      val honolulu = Zone("Pacific/Honolulu")
-
-      val time1 = Time(1375168033370L) // Tue 30 Jul 2013 08:07:13.370 BST
-      Date dateOf(time1, utc) should equal(Date(2013, 7, 30))
-      dateOf(time1, london) should equal(Date(2013, 7, 30))
-      dateOf(time1, stockholm) should equal(Date(2013, 7, 30))
-      dateOf(time1, sydney) should equal(Date(2013, 7, 30))
-      dateOf(time1, honolulu) should equal(Date(2013, 7, 29))
-
-      val time2 = Time(951867000000L) // Tue 29 Feb 2000 23:30:00.000 GMT
-      dateOf(time2, utc) should equal(Date(2000, 2, 29))
-      dateOf(time2, london) should equal(Date(2000, 2, 29))
-      dateOf(time2, stockholm) should equal(Date(2000, 3, 1))
-      dateOf(time2, sydney) should equal(Date(2000, 3, 1))
-      dateOf(time2, honolulu) should equal(Date(2000, 2, 29))
-
-      val time3 = Time(227746800000L) // Mon 21 Mar 1977 00:00:00.000 BST
-      dateOf(time3, utc) should equal(Date(1977, 3, 20))
-      dateOf(time3, london) should equal(Date(1977, 3, 21))
-      dateOf(time3, stockholm) should equal(Date(1977, 3, 21))
-      dateOf(time3, sydney) should equal(Date(1977, 3, 21))
-      dateOf(time3, honolulu) should equal(Date(1977, 3, 20))
     }
   }
 }

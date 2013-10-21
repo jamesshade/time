@@ -38,4 +38,8 @@ object Conversions {
 
     Date(date.getYear, date.getMonthOfYear, date.getDayOfMonth)
   }
+
+  implicit def zoneToJoda(joda: DateTimeZone) = ??? // TODO [JJS] IMPLEMENT
+
+  implicit def zoneFromJoda(zone: Zone) = ??? // TODO [JJS] IMPLEMENT
 }
