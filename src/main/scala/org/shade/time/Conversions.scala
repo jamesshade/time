@@ -20,21 +20,21 @@ import org.joda.time._
 object Conversions {
   // TODO [JJS] Should this be "IsoUtcConversions"?
 
-  implicit def timeToLong(time: Time): Long = time.millis
+  implicit def instantToLong(instant: Instant): Long = instant.millis
 
-  implicit def timeFromLong(time: Long): Time = Time(time)
+  implicit def instantFromLong(instant: Long): Instant = Instant(instant)
 
-  implicit def timeToJoda(time: Time): DateTime = new DateTime(time.millis, isoUtc)
+  implicit def instantToJoda(instant: Instant): DateTime = new DateTime(instant.millis, isoUtc)
 
-  implicit def timeFromJoda(time: ReadableInstant): Time = Time(time.getMillis)
+  implicit def instantFromJoda(instant: ReadableInstant): Instant = Instant(instant.getMillis)
 
   implicit def dateToJoda(date: Date): LocalDate = new LocalDate(date.year, date.month, date.day, isoUtc)
 
   implicit def dateFromJoda(joda: LocalDate): Date = {
 
     val date = if (joda.getChronology == isoUtc) joda else {
-      val time = new DateTime(joda.toDateTimeAtStartOfDay(DateTimeZone.UTC).plusHours(12).getMillis, isoUtc)
-      new LocalDate(time, isoUtc)
+      val jodaDateTime = new DateTime(joda.toDateTimeAtStartOfDay(DateTimeZone.UTC).plusHours(12).getMillis, isoUtc)
+      new LocalDate(jodaDateTime, isoUtc)
     }
 
     Date(date.getYear, date.getMonthOfYear, date.getDayOfMonth)
@@ -53,7 +53,7 @@ object Joda {
 
   def unapply(zone: Zone): Option[DateTimeZone] = Option(zone).map(zoneToJoda) // TODO [JJS] TEST
 
-  def unapply(time: Time): Option[DateTime] = Option(time).map(timeToJoda) // TODO [JJS] TEST
+  def unapply(instant: Instant): Option[DateTime] = Option(instant).map(instantToJoda) // TODO [JJS] TEST
 
   def unapply(date: Date): Option[LocalDate] = Option(date).map(dateToJoda) // TODO [JJS] TEST
 }

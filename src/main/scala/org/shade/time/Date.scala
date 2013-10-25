@@ -16,7 +16,8 @@
 package org.shade.time
 
 import org.joda.time.LocalDate
-import org.shade.core.Asserts._
+import org.shade.Asserts
+import Asserts._
 
 case class Date(year: Int, month: Int, day: Int) {
 
@@ -32,4 +33,4 @@ case class Date(year: Int, month: Int, day: Int) {
 }
 
 case class InvalidDateException(year: Int, month: Int, day: Int, cause: Throwable)
-  extends RuntimeException(s"Invalid ISO date: (Year: $year) (Month: $month) (Day: $day)")
+  extends RuntimeException(s"Invalid ISO date: (Year: $year) (Month: $month) (Day: $day)", cause)

@@ -17,7 +17,7 @@ package org.shade.time
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.chrono.ISOChronology
-import org.joda.time.format.ISODateTimeFormat
+import org.shade.Asserts._
 
 // TODO [JJS] TEST ZONE CLASS & OBJECT
 // TODO [JJS] IS THE CONCEPT OF EQUALITY OKAY HERE?  SHOULDN'T GMT == "+0000" == "+00:00" ?
@@ -32,31 +32,36 @@ case class Zone(id: String) {
 
   override lazy val toString: String = id
 
-  def apply(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int): Time = {
+  def apply(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int): Instant = {
     try {
-      Time(new DateTime(year, month, day, hour, minute, second, millisecond, ISOChronology.getInstance(joda)).getMillis)
+      Instant(new DateTime(year, month, day, hour, minute, second, millisecond, ISOChronology.getInstance(joda)).getMillis)
     } catch {
       case cause: Throwable => throw new InvalidTimeException(year, month, day, hour, minute, second, millisecond, this, cause)
     }
   }
 
-  def apply(dateAndTimeOfDay: DateAndTimeOfDay): Time = apply(dateAndTimeOfDay.date, dateAndTimeOfDay.timeOfDay)
+  def today(implicit clock: Clock = SystemClock) = dateOf(clock.now)
+
+  def apply(dateAndTimeOfDay: DateAndTimeOfDay): Instant = apply(dateAndTimeOfDay.date, dateAndTimeOfDay.timeOfDay)
   
-  def apply(date: Date, timeOfDay: TimeOfDay): Time = {
+  def apply(date: Date, timeOfDay: TimeOfDay): Instant = {
     apply(date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute, timeOfDay.second, timeOfDay.millisecond)
   }
 
-  def unapply(time: Time): Option[TimeInZone] = Option(time).map(new TimeInZone(_))
+  def unapply(instant: Instant): Option[(Int, Int, Int, Int, Int, Int, Int)] = Option(instant).map(time => {
+    val t = dateAndTimeOfDay(instant)
+    (t.year, t.month, t.day, t.hour, t.minute, t.second, t.millisecond)
+  })
 
-  def dateAndTimeOfDay(time: Time): DateAndTimeOfDay  = TimeInZone(time).dateAndTimeOfDay
-  def dateOf(time: Time): Date = TimeInZone(time).date
-  def timeOf(time: Time): TimeOfDay = TimeInZone(time).timeOfDay
+  def dateAndTimeOfDay(instant: Instant): DateAndTimeOfDay  = TimeInZone(instant).dateAndTimeOfDay // TODO [JJS] MUST BE A BETTER NAME FOR THIS
+  def dateOf(instant: Instant): Date = TimeInZone(instant).date  // TODO [JJS] DO WE REALLY WANT THIS HERE?
+  def timeOf(instant: Instant): TimeOfDay = TimeInZone(instant).timeOfDay // TODO [JJS] DO WE REALLY WANT THIS HERE?
 
-  private case class TimeInZone(time: Time) {
+  private case class TimeInZone(instant: Instant) {
 
-    if (time == null) throw new NullPointerException("time is null")
+    notNull("instant" -> instant)
 
-    private val jodaInZone = new DateTime(time.millis, ISOChronology.getInstance(joda))
+    private val jodaInZone = new DateTime(instant.millis, ISOChronology.getInstance(joda))
 
     lazy val dateAndTimeOfDay = DateAndTimeOfDay(
       jodaInZone.getYear,
@@ -69,16 +74,6 @@ case class Zone(id: String) {
 
     lazy val date = dateAndTimeOfDay.date
     lazy val timeOfDay = dateAndTimeOfDay.timeOfDay
-
-    override def equals(other: Any): Boolean = Option(other) match {
-      case Some(t: TimeInZone) => time == t.time
-      case Some(t: Time) => time == t
-      case _ => false
-    }
-
-    override lazy val hashCode: Int = time.hashCode
-
-    override def toString = ISODateTimeFormat.dateTime.print(jodaInZone)
   }
 }
 

@@ -16,13 +16,9 @@
 package org.shade.time
 
 trait Clock {
-
-  def now: Time
-
-  // TODO [JJS] REMOVE THIS?
-  final def today(zone: Zone): Date = zone.dateOf(now)
+  def now: Instant
 }
 
 object SystemClock extends Clock {
-  override def now = Time(System.currentTimeMillis)
+  override def now = Instant(System.currentTimeMillis)
 }

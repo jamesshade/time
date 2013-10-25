@@ -13,11 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.shade.time
+package org.shade
 
-import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat
+object Asserts {
 
-case class Time(millis: Long) {
-  override lazy val toString = ISODateTimeFormat.dateTime.print(new DateTime(millis, isoUtc))
+  def notNull(params: (String, Any)*) {
+    if (params == null) throw new AssertionError("Params are null")
+    params.foreach {
+      case (name: String, param: Any) => {
+        if (param == null) throw new NullPointerException(s"Parameter '$name' is null")
+      }
+    }
+  }
 }

@@ -35,17 +35,17 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
   "Assigning a Time to a Long" should {
 
     "produce the right value #1" in {
-      val value1: Long = Time(100000L)
+      val value1: Long = Instant(100000L)
       value1 shouldBe 100000L
     }
 
     "produce the right value #2" in {
-      val value2: Long = Time(1381386682010L)
+      val value2: Long = Instant(1381386682010L)
       value2 shouldBe 1381386682010L
     }
 
     "produce the right value #3" in {
-      val value3: Long = Time(-1381386682010L)
+      val value3: Long = Instant(-1381386682010L)
       value3 shouldBe -1381386682010L
     }
   }
@@ -53,83 +53,83 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
   "Assigning a Long to a Time" should {
 
     "produce the right Time #1" in {
-      val time: Time = 100000L
-      time shouldBe Time(100000L)
+      val instant: Instant = 100000L
+      instant shouldBe Instant(100000L)
     }
 
     "produce the right Time #2" in {
-      val time: Time = 1381386682010L
-      time shouldBe Time(1381386682010L)
+      val instant: Instant = 1381386682010L
+      instant shouldBe Instant(1381386682010L)
     }
 
     "produce the right Time #3" in {
-      val time: Time = -1381386682010L
-      time shouldBe Time(-1381386682010L)
+      val instant: Instant = -1381386682010L
+      instant shouldBe Instant(-1381386682010L)
     }
   }
 
   "Assigning a Time from a Joda Instant" should {
 
     "produce the right Time (regardless of the chronology and timezone #1)" in {
-      val time: Time = new DateTime(100000L, isoUtc)
-      time shouldBe Time(100000L)
+      val instant: Instant = new DateTime(100000L, isoUtc)
+      instant shouldBe Instant(100000L)
     }
 
     "produce the right Time (regardless of the chronology and timezone #2)" in {
-      val time: Time = new DateTime(100000L, copticCaracas)
-      time shouldBe Time(100000L)
+      val instant: Instant = new DateTime(100000L, copticCaracas)
+      instant shouldBe Instant(100000L)
     }
 
     "produce the right Time (regardless of the chronology and timezone #3)" in {
-      val time: Time = new DateTime(100000L, islamicIstanbul)
-      time shouldBe Time(100000L)
+      val instant: Instant = new DateTime(100000L, islamicIstanbul)
+      instant shouldBe Instant(100000L)
     }
 
     "produce the right Time (regardless of the chronology and timezone #4)" in {
-      val time: Time = new DateTime(100000L, gregorianGuatemala)
-      time shouldBe Time(100000L)
+      val instant: Instant = new DateTime(100000L, gregorianGuatemala)
+      instant shouldBe Instant(100000L)
     }
 
     "produce the right Time (regardless of the chronology and timezone #5)" in {
-      val time: Time = new DateTime(100000L, buddhistBudapest)
-      time shouldBe Time(100000L)
+      val instant: Instant = new DateTime(100000L, buddhistBudapest)
+      instant shouldBe Instant(100000L)
     }
 
     "return a Time object representing the same instant for a simply constructed DateTime in system Chronology #1" in {
-      val time: Time = new DateTime(45345435367L)
-      time shouldBe Time(45345435367L)
+      val instant: Instant = new DateTime(45345435367L)
+      instant shouldBe Instant(45345435367L)
     }
 
     "return a Time object representing the same instant for a simply constructed DateTime in system Chronology #2" in {
-      val time: Time = new DateTime(1000L)
-      time shouldBe Time(1000L)
+      val instant: Instant = new DateTime(1000L)
+      instant shouldBe Instant(1000L)
     }
 
     "return a Time object representing the same instant" in {
-      val time: Time = new DateTime(45345435367L, isoUtc)
-      time shouldBe Time(45345435367L)
+      val instant: Instant = new DateTime(45345435367L, isoUtc)
+      instant shouldBe Instant(45345435367L)
     }
 
-    "return a Time object representing the same instant for a DateTime in a different chronology and time zone" in {
-      val time: Time = new DateTime(45345435367L, CopticChronology.getInstance(DateTimeZone.forID("Europe/London")))
-      time shouldBe Time(45345435367L)
+    "return an Instant object representing the same instant for a DateTime in a different chronology and time zone" in {
+      val instant: Instant = new DateTime(45345435367L, CopticChronology.getInstance(DateTimeZone.forID("Europe/London")))
+      instant shouldBe Instant(45345435367L)
     }
 
-    "return a Time object representing the same instant for some other ReadableInstant subclass in the PST timezone" in {
-      val time: Time = new DateMidnight(1375080285918L, DateTimeZone.forTimeZone(TimeZone.getTimeZone("PST")))
-      time shouldBe Time(1374994800000L)
+    "return an Instant object representing the same instant for some other ReadableInstant subclass in the PST timezone" in {
+      val instant: Instant = new DateMidnight(1375080285918L, DateTimeZone.forTimeZone(TimeZone.getTimeZone("PST")))
+      instant shouldBe Instant(1374994800000L)
     }
 
-    "return a Time object representing the same instant for some other ReadableInstant subclass in the UK timezone" in {
-      val time: Time = new DateMidnight(1375080285918L, DateTimeZone.forID("Europe/London"))
-      time shouldBe Time(1375052400000L)
+    "return a Instant object representing the same instant for some other ReadableInstant subclass in the UK timezone" in {
+      val instant: Instant = new DateMidnight(1375080285918L, DateTimeZone.forID("Europe/London"))
+      instant shouldBe Instant(1375052400000L)
     }
   }
 
-  "Assigning a Joda DateTime from a Time" should {
+  "Assigning a Joda DateTime from an Instant" should {
 
     "produce the right DateTime with ISO chronology and UTC timezone #1" in {
-      val joda: DateTime = Time(100000L)
+      val joda: DateTime = Instant(100000L)
       joda shouldBe new DateTime(100000L, isoUtc)
     }
 
@@ -140,17 +140,17 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "produce the right DateTime with ISO chronology and UTC timezone #3" in {
-      val joda: DateTime = Time(381386682010L)
+      val joda: DateTime = Instant(381386682010L)
       joda shouldBe new DateTime(381386682010L, isoUtc)
     }
 
     "produce the right DateTime with ISO chronology and UTC timezone #4" in {
-      val joda: DateTime = Time(-381386682010L)
+      val joda: DateTime = Instant(-381386682010L)
       joda shouldBe new DateTime(-381386682010L, isoUtc)
     }
 
     "produce the right DateTime with ISO chronology and UTC timezone #5" in {
-      val joda: DateTime = Time(1231231232L)
+      val joda: DateTime = Instant(1231231232L)
       joda shouldBe new DateTime(1231231232L, isoUtc)
     }
   }

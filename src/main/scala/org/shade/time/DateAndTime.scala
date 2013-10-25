@@ -21,7 +21,7 @@ case class DateAndTimeOfDay(year: Int, month: Int, day: Int, hour: Int, minute: 
 }
 
 object DateAndTimeOfDay {
-  def apply(date: Date, timeOfDay: TimeOfDay) = {
+  def apply(date: Date, timeOfDay: TimeOfDay): DateAndTimeOfDay = {
     DateAndTimeOfDay(date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute, timeOfDay.second, timeOfDay.millisecond)
   }
 }
