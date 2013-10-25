@@ -17,22 +17,20 @@ package org.shade.time
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.chrono.ISOChronology
+import org.joda.time.format.ISODateTimeFormat
 
 // TODO [JJS] TEST ZONE CLASS & OBJECT
-// TODO [JJS] REMOVE EXPOSURE OF JODA STUFF FROM HERE (in line with Date and Time) (?)
+// TODO [JJS] IS THE CONCEPT OF EQUALITY OKAY HERE?  SHOULDN'T GMT == "+0000" == "+00:00" ?
 
-final class Zone(val joda: DateTimeZone) {
+case class Zone(id: String) {
 
-  lazy val id = joda.getID
-
-  override lazy val toString: String = id
-
-  override def equals(other: Any) = other match {
-    case Zone(otherId: String) if otherId == id => true
-    case _ => false
+  private[time] val joda = try {
+    DateTimeZone.forID(id)
+  } catch {
+    case e: IllegalArgumentException => throw new InvalidTimeZoneException(id, e.getMessage)
   }
 
-  override lazy val hashCode: Int = id.hashCode
+  override lazy val toString: String = id
 
   def apply(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int): Time = {
     try {
@@ -42,40 +40,57 @@ final class Zone(val joda: DateTimeZone) {
     }
   }
 
-  def unapply(time: Time): Option[(Int, Int, Int, Int, Int, Int, Int)] = {
-    val zoneTime = timeInZone(time)
-    Some((zoneTime.getYear, zoneTime.getMonthOfYear, zoneTime.getDayOfMonth,
-      zoneTime.getHourOfDay, zoneTime.getMinuteOfHour, zoneTime.getSecondOfMinute, zoneTime.getMillisOfSecond))
+  def apply(dateAndTimeOfDay: DateAndTimeOfDay): Time = apply(dateAndTimeOfDay.date, dateAndTimeOfDay.timeOfDay)
+  
+  def apply(date: Date, timeOfDay: TimeOfDay): Time = {
+    apply(date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute, timeOfDay.second, timeOfDay.millisecond)
   }
 
-  def dateOf(time: Time): Date = {
-    val instant = timeInZone(time)
-    Date(instant.getYear, instant.getMonthOfYear, instant.getDayOfMonth)
+  def unapply(time: Time): Option[TimeInZone] = Option(time).map(new TimeInZone(_))
+
+  def dateAndTimeOfDay(time: Time): DateAndTimeOfDay  = TimeInZone(time).dateAndTimeOfDay
+  def dateOf(time: Time): Date = TimeInZone(time).date
+  def timeOf(time: Time): TimeOfDay = TimeInZone(time).timeOfDay
+
+  private case class TimeInZone(time: Time) {
+
+    if (time == null) throw new NullPointerException("time is null")
+
+    private val jodaInZone = new DateTime(time.millis, ISOChronology.getInstance(joda))
+
+    lazy val dateAndTimeOfDay = DateAndTimeOfDay(
+      jodaInZone.getYear,
+      jodaInZone.getMonthOfYear,
+      jodaInZone.getDayOfMonth,
+      jodaInZone.getHourOfDay,
+      jodaInZone.getMinuteOfHour,
+      jodaInZone.getSecondOfMinute,
+      jodaInZone.getMillisOfSecond)
+
+    lazy val date = dateAndTimeOfDay.date
+    lazy val timeOfDay = dateAndTimeOfDay.timeOfDay
+
+    override def equals(other: Any): Boolean = Option(other) match {
+      case Some(t: TimeInZone) => time == t.time
+      case Some(t: Time) => time == t
+      case _ => false
+    }
+
+    override lazy val hashCode: Int = time.hashCode
+
+    override def toString = ISODateTimeFormat.dateTime.print(jodaInZone)
   }
-  
-  private def timeInZone(time: Time) = new DateTime(time.millis, ISOChronology.getInstance(joda))
 }
 
 object Zone {
 
-  def apply(id: String): Zone = try {
-    new Zone(DateTimeZone.forID(id))
-  } catch {
-    case e: IllegalArgumentException => throw new InvalidTimezoneException(id, e.getMessage)
-  }
-
   val utc = Zone("UTC")
 
   def unapply(zone: Zone): Option[String] = Option(zone).map(_.id)
-
-  object Joda {
-    def unapply(zone: Zone): Option[DateTimeZone] = Option(zone).map(_.joda)
-  }
 }
 
-case class InvalidTimezoneException(id: String, message: String) extends RuntimeException(s"Invalid timezone '$id': $message")
+case class InvalidTimeZoneException(id: String, message: String) extends RuntimeException(s"Invalid time zone '$id': $message")
 
 case class InvalidTimeException(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int, zone: Zone, cause: Throwable)
   extends RuntimeException(s"Invalid time: [(Year: $year) (Month: $month) (Day: $day) " +
     s"(Hour: $hour) (Minute: $minute) (Second: $second) (Millisecond: $millisecond) (Zone: $zone)]: " + cause.getMessage, cause)
-

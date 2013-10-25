@@ -15,14 +15,13 @@
  */
 package org.shade.time
 
-trait Clock {
-
-  def now: Time
-
-  // TODO [JJS] REMOVE THIS?
-  final def today(zone: Zone): Date = zone.dateOf(now)
+case class DateAndTimeOfDay(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int) {
+  val date: Date = Date(year, month, day)
+  val timeOfDay: TimeOfDay = TimeOfDay(hour, minute, second, millisecond)
 }
 
-object SystemClock extends Clock {
-  override def now = Time(System.currentTimeMillis)
+object DateAndTimeOfDay {
+  def apply(date: Date, timeOfDay: TimeOfDay) = {
+    DateAndTimeOfDay(date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute, timeOfDay.second, timeOfDay.millisecond)
+  }
 }

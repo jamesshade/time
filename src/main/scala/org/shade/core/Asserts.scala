@@ -13,16 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.shade.time
+package org.shade.core
 
-trait Clock {
+object Asserts {
 
-  def now: Time
-
-  // TODO [JJS] REMOVE THIS?
-  final def today(zone: Zone): Date = zone.dateOf(now)
-}
-
-object SystemClock extends Clock {
-  override def now = Time(System.currentTimeMillis)
+  def notNull(params: (String, Any)*) {
+    if (params == null) throw new AssertionError("Params are null")
+    params.foreach {
+      case (name: String, param: Any) => {
+        if (param == null) throw new NullPointerException(s"Parameter '$name' is null")
+      }
+    }
+  }
 }

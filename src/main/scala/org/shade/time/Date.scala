@@ -16,13 +16,16 @@
 package org.shade.time
 
 import org.joda.time.LocalDate
+import org.shade.core.Asserts._
 
 case class Date(year: Int, month: Int, day: Int) {
+
+  notNull("year" -> year, "month" -> month, "day" -> day)
 
   try {
     new LocalDate(year, month, day, isoUtc)
   } catch {
-    case e: Throwable => throw InvalidDateException(year, month, day, e)
+    case e: Exception => throw InvalidDateException(year, month, day, e)
   }
 
   override lazy val toString = "%04d-%02d-%02d".format(year, month, day)

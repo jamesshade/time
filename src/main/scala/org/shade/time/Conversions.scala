@@ -18,6 +18,7 @@ package org.shade.time
 import org.joda.time._
 
 object Conversions {
+  // TODO [JJS] Should this be "IsoUtcConversions"?
 
   implicit def timeToLong(time: Time): Long = time.millis
 
@@ -39,7 +40,20 @@ object Conversions {
     Date(date.getYear, date.getMonthOfYear, date.getDayOfMonth)
   }
 
-  implicit def zoneToJoda(joda: DateTimeZone) = ??? // TODO [JJS] IMPLEMENT
+  implicit def zoneToJoda(zone: Zone) = zone.joda // TODO [JJS] TEST
 
-  implicit def zoneFromJoda(zone: Zone) = ??? // TODO [JJS] IMPLEMENT
+  implicit def zoneFromJoda(joda: DateTimeZone) = Zone(joda.getID) // TODO [JJS] TEST
+}
+
+object Joda {
+
+  import Conversions._
+
+  // TODO [JJS] PERHAPS MOVE CONVERSIONS IN HERE AND MAKE IMPLICIT?
+
+  def unapply(zone: Zone): Option[DateTimeZone] = Option(zone).map(zoneToJoda) // TODO [JJS] TEST
+
+  def unapply(time: Time): Option[DateTime] = Option(time).map(timeToJoda) // TODO [JJS] TEST
+
+  def unapply(date: Date): Option[LocalDate] = Option(date).map(dateToJoda) // TODO [JJS] TEST
 }
