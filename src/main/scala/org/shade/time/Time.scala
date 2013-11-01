@@ -15,13 +15,7 @@
  */
 package org.shade.time
 
-import org.shade.Assertions._
-
-// TODO [JJS] Time Test
-
 case class Time(hour: Int, minute: Int, second: Int, millisecond: Int) {
-
-  notNull("hour" -> hour, "minute" -> minute, "second" -> second, "millisecond" -> millisecond)
 
   if (hour < 0 || hour >= 24 ||  minute < 0 || minute >= 60 ||
     second < 0 || second >= 60 || millisecond < 0 || millisecond >= 1000) {
