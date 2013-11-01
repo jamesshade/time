@@ -17,8 +17,6 @@ package org.shade
 
 object Assertions {
 
-  // TODO [JJS] TEST Assertions
-  
   def notNull(params: (String, Any)*) {
     if (params == null) throw new AssertionError("Parameters are null")
     params.foreach {
