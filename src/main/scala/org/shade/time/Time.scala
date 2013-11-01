@@ -15,18 +15,21 @@
  */
 package org.shade.time
 
- // TODO [JJS] TEST TIME OF DAY
+import org.shade.Assertions._
 
-case class TimeOfDay(hour: Int, minute: Int, second: Int, millisecond: Int) {
+// TODO [JJS] Time Test
 
-  (Option(hour), Option(minute), Option(second), Option(millisecond)) match {
-    case (Some(h), Some(m), Some(s), Some(ms))
-      if h >= 0 && h < 24 && m >= 0 && m < 60 && s >= 0 && s < 60 && ms >= 0 && ms < 1000 => // Okay
-    case _ => throw InvalidTimeOfDayException(hour, minute, second, millisecond)
+case class Time(hour: Int, minute: Int, second: Int, millisecond: Int) {
+
+  notNull("hour" -> hour, "minute" -> minute, "second" -> second, "millisecond" -> millisecond)
+
+  if (hour < 0 || hour >= 24 ||  minute < 0 || minute >= 60 ||
+    second < 0 || second >= 60 || millisecond < 0 || millisecond >= 1000) {
+    throw InvalidTimeException(hour, minute, second, millisecond)
   }
 
   override lazy val toString = "%02d:%02d:%02d.%03d".format(hour, minute, second, millisecond)
 }
 
-case class InvalidTimeOfDayException(hour: Int, minute: Int, second: Int, millisecond: Int)
-  extends RuntimeException(s"Invalid time of day: (Hour: $hour) (Minute: $minute) (Second: $second) (Millisecond: $millisecond)")
+case class InvalidTimeException(hour: Int, minute: Int, second: Int, millisecond: Int)
+  extends TimeException(s"Invalid time of day: (Hour: $hour) (Minute: $minute) (Second: $second) (Millisecond: $millisecond)")

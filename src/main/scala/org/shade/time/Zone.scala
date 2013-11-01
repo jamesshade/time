@@ -17,53 +17,51 @@ package org.shade.time
 
 import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.chrono.ISOChronology
-import org.shade.Asserts._
+import org.shade.Assertions._
 
-// TODO [JJS] TEST ZONE CLASS & OBJECT
 // TODO [JJS] IS THE CONCEPT OF EQUALITY OKAY HERE?  SHOULDN'T GMT == "+0000" == "+00:00" ?
+// TODO [JJS] notNull CHECKS - necessary? is use consistent (e.g. everywhere or not at all)?
 
 case class Zone(id: String) {
+
+  notNull("id" -> id)
 
   private[time] val joda = try {
     DateTimeZone.forID(id)
   } catch {
-    case e: IllegalArgumentException => throw new InvalidTimeZoneException(id, e.getMessage)
+    case e: IllegalArgumentException => throw new InvalidZoneException(id, e.getMessage, e)
   }
 
   override lazy val toString: String = id
 
   def apply(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int): Instant = {
+    apply(Date(year, month, day), Time(hour, minute, second, millisecond))
+  }
+
+  def apply(dateAndTime: DateAndTime): Instant = {
+    apply(dateAndTime.date, dateAndTime.time)
+  }
+  
+  def apply(date: Date, time: Time): Instant = {
     try {
-      Instant(new DateTime(year, month, day, hour, minute, second, millisecond, ISOChronology.getInstance(joda)).getMillis)
+      Instant(new DateTime(date.year, date.month, date.day, time.hour, time.minute, time.second, time.millisecond, ISOChronology.getInstance(joda)).getMillis)
     } catch {
-      case cause: Throwable => throw new InvalidTimeException(year, month, day, hour, minute, second, millisecond, this, cause)
+      case cause: Exception => throw new InvalidTimeInZoneException(date.year, date.month, date.day, time.hour, time.minute, time.second, time.millisecond, this, cause)
     }
   }
 
-  def today(implicit clock: Clock = SystemClock) = dateOf(clock.now)
-
-  def apply(dateAndTimeOfDay: DateAndTimeOfDay): Instant = apply(dateAndTimeOfDay.date, dateAndTimeOfDay.timeOfDay)
-  
-  def apply(date: Date, timeOfDay: TimeOfDay): Instant = {
-    apply(date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute, timeOfDay.second, timeOfDay.millisecond)
-  }
-
   def unapply(instant: Instant): Option[(Int, Int, Int, Int, Int, Int, Int)] = Option(instant).map(time => {
-    val t = dateAndTimeOfDay(instant)
+    val t = dateAndTimeOf(instant)
     (t.year, t.month, t.day, t.hour, t.minute, t.second, t.millisecond)
   })
 
-  def dateAndTimeOfDay(instant: Instant): DateAndTimeOfDay  = TimeInZone(instant).dateAndTimeOfDay // TODO [JJS] MUST BE A BETTER NAME FOR THIS
-  def dateOf(instant: Instant): Date = TimeInZone(instant).date  // TODO [JJS] DO WE REALLY WANT THIS HERE?
-  def timeOf(instant: Instant): TimeOfDay = TimeInZone(instant).timeOfDay // TODO [JJS] DO WE REALLY WANT THIS HERE?
+  def today(implicit clock: Clock = SystemClock) = dateOf(clock.now)
 
-  private case class TimeInZone(instant: Instant) {
+  def dateAndTimeOf(instant: Instant): DateAndTime  = {
 
-    notNull("instant" -> instant)
+    val jodaInZone = new DateTime(instant.millis, ISOChronology.getInstance(joda))
 
-    private val jodaInZone = new DateTime(instant.millis, ISOChronology.getInstance(joda))
-
-    lazy val dateAndTimeOfDay = DateAndTimeOfDay(
+    DateAndTime(
       jodaInZone.getYear,
       jodaInZone.getMonthOfYear,
       jodaInZone.getDayOfMonth,
@@ -71,21 +69,19 @@ case class Zone(id: String) {
       jodaInZone.getMinuteOfHour,
       jodaInZone.getSecondOfMinute,
       jodaInZone.getMillisOfSecond)
-
-    lazy val date = dateAndTimeOfDay.date
-    lazy val timeOfDay = dateAndTimeOfDay.timeOfDay
   }
+
+  def dateOf(instant: Instant): Date = dateAndTimeOf(instant).date
+  def timeOf(instant: Instant): Time = dateAndTimeOf(instant).time
 }
 
 object Zone {
-
   val utc = Zone("UTC")
-
-  def unapply(zone: Zone): Option[String] = Option(zone).map(_.id)
 }
 
-case class InvalidTimeZoneException(id: String, message: String) extends RuntimeException(s"Invalid time zone '$id': $message")
+case class InvalidZoneException(id: String, message: String, cause: Throwable = null) extends TimeException(s"Unknown/invalid time zone '$id': $message", cause)
 
-case class InvalidTimeException(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int, zone: Zone, cause: Throwable)
-  extends RuntimeException(s"Invalid time: [(Year: $year) (Month: $month) (Day: $day) " +
-    s"(Hour: $hour) (Minute: $minute) (Second: $second) (Millisecond: $millisecond) (Zone: $zone)]: " + cause.getMessage, cause)
+case class InvalidTimeInZoneException(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int, zone: Zone, cause: Throwable)
+  extends TimeException(s"Invalid time: (Year: $year) (Month: $month) (Day: $day) " +
+    s"(Hour: $hour) (Minute: $minute) (Second: $second) (Millisecond: $millisecond) (Zone: $zone): " + cause.getMessage, cause)
+

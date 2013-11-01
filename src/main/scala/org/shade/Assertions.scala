@@ -15,14 +15,16 @@
  */
 package org.shade
 
-object Asserts {
+object Assertions {
 
+  // TODO [JJS] TEST Assertions
+  
   def notNull(params: (String, Any)*) {
-    if (params == null) throw new AssertionError("Params are null")
+    if (params == null) throw new AssertionError("Parameters are null")
     params.foreach {
-      case (name: String, param: Any) => {
-        if (param == null) throw new NullPointerException(s"Parameter '$name' is null")
-      }
+      case (null, _) => throw new AssertionError("Parameter name is null")
+      case (name, null) => throw new NullPointerException(s"Parameter '$name' is null")
+      case _ => // All okay
     }
   }
 }

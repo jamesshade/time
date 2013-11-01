@@ -15,13 +15,15 @@
  */
 package org.shade.time
 
-case class DateAndTimeOfDay(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int) {
+// TODO [JJS] TEST DateAndTime
+
+case class DateAndTime(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int) {
   val date: Date = Date(year, month, day)
-  val timeOfDay: TimeOfDay = TimeOfDay(hour, minute, second, millisecond)
+  val time: Time = Time(hour, minute, second, millisecond)
 }
 
-object DateAndTimeOfDay {
-  def apply(date: Date, timeOfDay: TimeOfDay): DateAndTimeOfDay = {
-    DateAndTimeOfDay(date.year, date.month, date.day, timeOfDay.hour, timeOfDay.minute, timeOfDay.second, timeOfDay.millisecond)
+object DateAndTime {
+  def apply(date: Date, time: Time): DateAndTime = {
+    DateAndTime(date.year, date.month, date.day, time.hour, time.minute, time.second, time.millisecond)
   }
 }

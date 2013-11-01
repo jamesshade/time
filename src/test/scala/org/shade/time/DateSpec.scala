@@ -140,16 +140,16 @@ class DateSpec extends WordSpec with Matchers with MockitoSugar {
       evaluating(Date(1900, 2, 29)) should produce[InvalidDateException]
     }
 
-    "throw a NullPointerException if the year is null" in {
-      evaluating(Date(null.asInstanceOf[Int], 1, 1)) should produce [NullPointerException]
+    "return a valid date if the year is null (Scala converts it to zero)" in {
+      Date(null.asInstanceOf[Int], 1, 1) shouldBe Date(0, 1, 1)
     }
 
-    "throw a NullPointerException if the month is null" in {
-      evaluating(Date(1999, null.asInstanceOf[Int], 1)) should produce [NullPointerException]
+    "throw an InvalidDateException if the month is null (Scala converts it to zero)" in {
+      evaluating(Date(1999, null.asInstanceOf[Int], 1)) should produce [InvalidDateException]
     }
 
-    "throw a NullPointerException if the day is null" in {
-      evaluating(Date(1999, 1, null.asInstanceOf[Int])) should produce [NullPointerException]
+    "throw an InvalidDateException if the day is null (Scala converts it to zero)" in {
+      evaluating(Date(1999, 1, null.asInstanceOf[Int])) should produce [InvalidDateException]
     }
 
     "throw an InvalidDateException if the month is not in the range 1 to 12" in {

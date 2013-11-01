@@ -15,20 +15,4 @@
  */
 package org.shade.time
 
-import org.joda.time.LocalDate
-import org.shade.Assertions
-import Assertions._
-
-case class Date(year: Int, month: Int, day: Int) {
-
-  try {
-    new LocalDate(year, month, day, isoUtc)
-  } catch {
-    case e: Exception => throw InvalidDateException(year, month, day, e)
-  }
-
-  override lazy val toString = "%04d-%02d-%02d".format(year, month, day)
-}
-
-case class InvalidDateException(year: Int, month: Int, day: Int, cause: Throwable)
-  extends TimeException(s"Invalid ISO date: (Year: $year) (Month: $month) (Day: $day)", cause)
+abstract class TimeException(message: String, cause: Throwable = null) extends RuntimeException(message, cause)
