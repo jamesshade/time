@@ -43,16 +43,3 @@ object Conversions {
 
   implicit def zoneFromJoda(joda: DateTimeZone) = Zone(joda.getID)
 }
-
-object Joda {
-
-  import Conversions._
-
-  // TODO [JJS] PERHAPS MOVE CONVERSIONS IN HERE AND MAKE IMPLICIT?
-
-  def unapply(zone: Zone): Option[DateTimeZone] = Option(zone).map(zoneToJoda) // TODO [JJS] TEST
-
-  def unapply(instant: Instant): Option[DateTime] = Option(instant).map(instantToJoda) // TODO [JJS] TEST
-
-  def unapply(date: Date): Option[LocalDate] = Option(date).map(dateToJoda) // TODO [JJS] TEST
-}
