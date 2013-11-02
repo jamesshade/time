@@ -15,11 +15,12 @@
  */
 package org.shade.time
 
-// TODO [JJS] TEST DateAndTime
-
 case class DateAndTime(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int, millisecond: Int) {
+
   val date: Date = Date(year, month, day)
   val time: Time = Time(hour, minute, second, millisecond)
+
+  override def toString = date.toString + "T" + time.toString
 }
 
 object DateAndTime {

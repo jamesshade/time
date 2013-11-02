@@ -31,4 +31,4 @@ case class Date(year: Int, month: Int, day: Int) {
 }
 
 case class InvalidDateException(year: Int, month: Int, day: Int, cause: Throwable)
-  extends TimeException(s"Invalid ISO date: (Year: $year) (Month: $month) (Day: $day)", cause)
+  extends TimeException(s"Invalid ISO date: (Year: $year) (Month: $month) (Day: $day): ${cause.getMessage}", cause)
