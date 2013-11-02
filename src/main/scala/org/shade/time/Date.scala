@@ -16,8 +16,6 @@
 package org.shade.time
 
 import org.joda.time.LocalDate
-import org.shade.Assertions
-import Assertions._
 
 case class Date(year: Int, month: Int, day: Int) {
 

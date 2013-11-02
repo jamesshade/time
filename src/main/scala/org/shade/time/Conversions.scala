@@ -18,7 +18,6 @@ package org.shade.time
 import org.joda.time._
 
 object Conversions {
-  // TODO [JJS] Should this be "IsoUtcConversions"?
 
   implicit def instantToLong(instant: Instant): Long = instant.millis
 
@@ -40,9 +39,9 @@ object Conversions {
     Date(date.getYear, date.getMonthOfYear, date.getDayOfMonth)
   }
 
-  implicit def zoneToJoda(zone: Zone) = zone.joda // TODO [JJS] TEST
+  implicit def zoneToJoda(zone: Zone) = zone.joda
 
-  implicit def zoneFromJoda(joda: DateTimeZone) = Zone(joda.getID) // TODO [JJS] TEST
+  implicit def zoneFromJoda(joda: DateTimeZone) = Zone(joda.getID)
 }
 
 object Joda {

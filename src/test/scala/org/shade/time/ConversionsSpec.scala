@@ -261,4 +261,74 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
       joda shouldBe new LocalDate(1959, 1, 1, isoUtc)
     }
   }
+
+  "Assigning Zone from a Joda DateTimeZone" should {
+
+    "produce the right Zone #1" in {
+      val id = "Europe/London"
+      val joda = DateTimeZone.forID(id)
+      val zone: Zone = joda
+      zone.id shouldBe id
+      zone.joda shouldBe joda
+    }
+
+    "produce the right Zone #2" in {
+      val id = "+05:00"
+      val joda = DateTimeZone.forID(id)
+      val zone: Zone = joda
+      zone.id shouldBe id
+      zone.joda shouldBe joda
+    }
+
+    "produce the right Zone #3" in {
+      val id = "-05:00"
+      val joda = DateTimeZone.forID(id)
+      val zone: Zone = joda
+      zone.id shouldBe id
+      zone.joda shouldBe joda
+    }
+
+    "produce the right Zone #4" in {
+      val id = "Pacific/Honolulu"
+      val joda = DateTimeZone.forID(id)
+      val zone: Zone = joda
+      zone.id shouldBe id
+      zone.joda shouldBe joda
+    }
+  }
+
+  "Assigning Joda DateTimeZone from a Zone" should {
+
+    "produce the right DateTimeZone #1" in {
+      val id = "Europe/London"
+      val zone: Zone = Zone(id)
+      val joda: DateTimeZone = zone
+      joda.getID shouldBe id
+      joda shouldBe zone.joda
+    }
+
+    "produce the right DateTimeZone #2" in {
+      val id = "+05:00"
+      val zone: Zone = Zone(id)
+      val joda: DateTimeZone = zone
+      joda.getID shouldBe id
+      joda shouldBe zone.joda
+    }
+
+    "produce the right DateTimeZone #3" in {
+      val id = "-05:00"
+      val zone: Zone = Zone(id)
+      val joda: DateTimeZone = zone
+      joda.getID shouldBe id
+      joda shouldBe zone.joda
+    }
+
+    "produce the right DateTimeZone #4" in {
+      val id = "Pacific/Honolulu"
+      val zone: Zone = Zone(id)
+      val joda: DateTimeZone = zone
+      joda.getID shouldBe id
+      joda shouldBe zone.joda
+    }
+  }
 }
