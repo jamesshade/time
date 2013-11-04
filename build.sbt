@@ -1,3 +1,5 @@
+organization := "org.shade"
+
 name := "time"
 
 version := "1.0.0-SNAPSHOT"
