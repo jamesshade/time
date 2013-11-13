@@ -20,4 +20,23 @@ import org.joda.time.format.ISODateTimeFormat
 
 case class Instant(millis: Long) {
   override lazy val toString = ISODateTimeFormat.dateTime.print(new DateTime(millis, isoUtc))
+
+  def isBefore(instant: Instant) = millis < instant.millis
+  val < = isBefore _
+
+  def isAtOrBefore(instant: Instant) = millis <= instant.millis
+  val <= = isAtOrBefore _
+
+  def isAt(instant: Instant) = millis == instant.millis
+
+  def isAtOrAfter(instant: Instant) = millis >= instant.millis
+  val >= = isAtOrAfter _
+
+  def isAfter(instant: Instant) = millis > instant.millis
+  val > = isAfter _
+
+  // TODO [JJS] Instant should be pure - it should know nothing of durations (or should it) - why should a duration know about instants?
+  def timeSince(instant: Instant) = Duration(millis - instant.millis)
+  def - = timeSince _
+
 }

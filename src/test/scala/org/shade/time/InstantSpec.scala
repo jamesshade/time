@@ -27,6 +27,189 @@ class InstantSpec extends WordSpec with Matchers with MockitoSugar {
     }
   }
 
+  "The isBefore and < methods" should {
+
+    val millis = 435345345L
+    val thisInstant = Instant(millis)
+
+    "return false if the other instant is long before this instant" in {
+      val otherInstant = Instant(millis - 22332232L)
+      thisInstant isBefore otherInstant shouldBe false
+      thisInstant < otherInstant shouldBe false
+    }
+
+    "return false if the other instant is one millisecond before this instant" in {
+      val otherInstant = Instant(millis - 1L)
+      thisInstant isBefore otherInstant shouldBe false
+      thisInstant < otherInstant shouldBe false
+    }
+
+    "return false if the other instant is the same as this instant" in {
+      val otherInstant = Instant(millis)
+      thisInstant isBefore otherInstant shouldBe false
+      thisInstant < otherInstant shouldBe false
+    }
+
+    "return true if the other instant is one millisecond after this instant" in {
+      val otherInstant = Instant(millis + 1L)
+      thisInstant isBefore otherInstant shouldBe true
+      thisInstant < otherInstant shouldBe true
+    }
+
+    "return true if the other instant is long after this instant" in {
+      val otherInstant = Instant(millis + 5345435435L)
+      thisInstant isBefore otherInstant shouldBe true
+      thisInstant < otherInstant shouldBe true
+    }
+  }
+
+  "The isAtOrBefore and <= methods" should {
+
+    val millis = 435345345L
+    val thisInstant = Instant(millis)
+
+    "return false if the other instant is long before this instant" in {
+      val otherInstant = Instant(millis - 22332232L)
+      thisInstant isAtOrBefore otherInstant shouldBe false
+      thisInstant <= otherInstant shouldBe false
+    }
+
+    "return false if the other instant is one millisecond before this instant" in {
+      val otherInstant = Instant(millis - 1L)
+      thisInstant isAtOrBefore otherInstant shouldBe false
+      thisInstant <= otherInstant shouldBe false
+    }
+
+    "return true if the other instant is the same as this instant" in {
+      val otherInstant = Instant(millis)
+      thisInstant isAtOrBefore otherInstant shouldBe true
+      thisInstant <= otherInstant shouldBe true
+    }
+
+    "return true if the other instant is one millisecond after this instant" in {
+      val otherInstant = Instant(millis + 1L)
+      thisInstant isAtOrBefore otherInstant shouldBe true
+      thisInstant <= otherInstant shouldBe true
+    }
+
+    "return true if the other instant is long after this instant" in {
+      val otherInstant = Instant(millis + 5345435435L)
+      thisInstant isAtOrBefore otherInstant shouldBe true
+      thisInstant <= otherInstant shouldBe true
+    }
+  }
+
+
+  "The isAtOrAfter and >= methods" should {
+
+    val millis = 435345345L
+    val thisInstant = Instant(millis)
+
+    "return true if the other instant is long before this instant" in {
+      val otherInstant = Instant(millis - 22332232L)
+      thisInstant isAtOrAfter otherInstant shouldBe true
+      thisInstant >= otherInstant shouldBe true
+    }
+
+    "return true if the other instant is one millisecond before this instant" in {
+      val otherInstant = Instant(millis - 1L)
+      thisInstant isAtOrAfter otherInstant shouldBe true
+      thisInstant >= otherInstant shouldBe true
+    }
+
+    "return true if the other instant is the same as this instant" in {
+      val otherInstant = Instant(millis)
+      thisInstant isAtOrAfter otherInstant shouldBe true
+      thisInstant >= otherInstant shouldBe true
+    }
+
+    "return false if the other instant is one millisecond after this instant" in {
+      val otherInstant = Instant(millis + 1L)
+      thisInstant isAtOrAfter otherInstant shouldBe false
+      thisInstant >= otherInstant shouldBe false
+    }
+
+    "return false if the other instant is long after this instant" in {
+      val otherInstant = Instant(millis + 5345435435L)
+      thisInstant isAtOrAfter otherInstant shouldBe false
+      thisInstant >= otherInstant shouldBe false
+    }
+  }
+
+  "The isAfter and > methods" should {
+
+    val millis = 435345345L
+    val thisInstant = Instant(millis)
+
+    "return true if the other instant is long before this instant" in {
+      val otherInstant = Instant(millis - 22332232L)
+      thisInstant isAfter otherInstant shouldBe true
+      thisInstant > otherInstant shouldBe true
+    }
+
+    "return true if the other instant is one millisecond before this instant" in {
+      val otherInstant = Instant(millis - 1L)
+      thisInstant isAfter otherInstant shouldBe true
+      thisInstant > otherInstant shouldBe true
+    }
+
+    "return false if the other instant is the same as this instant" in {
+      val otherInstant = Instant(millis)
+      thisInstant isAfter otherInstant shouldBe false
+      thisInstant > otherInstant shouldBe false
+    }
+
+    "return false if the other instant is one millisecond after this instant" in {
+      val otherInstant = Instant(millis + 1L)
+      thisInstant isAfter otherInstant shouldBe false
+      thisInstant > otherInstant shouldBe false
+    }
+
+    "return false if the other instant is long after this instant" in {
+      val otherInstant = Instant(millis + 5345435435L)
+      thisInstant isAfter otherInstant shouldBe false
+      thisInstant > otherInstant shouldBe false
+    }
+  }
+
+  "The isAt and == methods" should {
+
+    val millis = 435345345L
+    val thisInstant = Instant(millis)
+
+    "return false if the other instant is long before this instant" in {
+      val otherInstant = Instant(millis - 22332232L)
+      thisInstant isAt otherInstant shouldBe false
+      thisInstant == otherInstant shouldBe false
+    }
+
+    "return false if the other instant is one millisecond before this instant" in {
+      val otherInstant = Instant(millis - 1L)
+      thisInstant isAt otherInstant shouldBe false
+      thisInstant == otherInstant shouldBe false
+    }
+
+    "return true if the other instant is the same as this instant" in {
+      val otherInstant = Instant(millis)
+      thisInstant isAt otherInstant shouldBe true
+      thisInstant == otherInstant shouldBe true
+    }
+
+    "return false if the other instant is one millisecond after this instant" in {
+      val otherInstant = Instant(millis + 1L)
+      thisInstant isAt otherInstant shouldBe false
+      thisInstant == otherInstant shouldBe false
+    }
+
+    "return false if the other instant is long after this instant" in {
+      val otherInstant = Instant(millis + 5345435435L)
+      thisInstant isAt otherInstant shouldBe false
+      thisInstant == otherInstant shouldBe false
+    }
+  }
+
+  "The "
+
   "The string representation of an Instant object" should {
 
     "be the ISO8601 format with milliseconds, in the UTC timezone" in {
