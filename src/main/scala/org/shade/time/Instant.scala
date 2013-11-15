@@ -35,8 +35,11 @@ case class Instant(millis: Long) {
   def isAfter(instant: Instant) = millis > instant.millis
   val > = isAfter _
 
-  // TODO [JJS] Instant should be pure - it should know nothing of durations (or should it) - why should a duration know about instants?
-  def timeSince(instant: Instant) = Duration(millis - instant.millis)
-  def - = timeSince _
+  // TODO [JJS] Test below:
 
+  def difference(instant: Instant) = Duration(Math.abs(millis - instant.millis))
+
+  def - (duration: Duration) = Instant(millis - duration.millis)
+
+  def + (duration: Duration) = Instant(millis + duration.millis)
 }
