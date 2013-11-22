@@ -15,8 +15,6 @@
  */
 package org.shade.time
 
-// TODO [JJS] TEST
-
 case class Duration(millis: Long) {
 
   override lazy val toString = millis + "ms"
