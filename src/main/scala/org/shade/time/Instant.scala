@@ -17,8 +17,10 @@ package org.shade.time
 
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
+import sun.security.jca.GetInstance.Instance
 
-case class Instant(millis: Long) {
+case class Instant(millis: Long) extends Comparable[Instant] {
+
   override lazy val toString = ISODateTimeFormat.dateTime.print(new DateTime(millis, isoUtc))
 
   def isBefore(instant: Instant) = millis < instant.millis
@@ -37,9 +39,13 @@ case class Instant(millis: Long) {
 
   // TODO [JJS] Test below:
 
-  def difference(instant: Instant) = Duration(Math.abs(millis - instant.millis))
+  def timeUntil(futureInstant: Instant) = Duration(futureInstant.millis - millis)
+  def timeSince(pastInstant: Instant) = Duration(millis - pastInstant.millis)
+  def timeBetween(otherInstant: Instant) = timeSince(otherInstant).abs
 
   def - (duration: Duration) = Instant(millis - duration.millis)
 
   def + (duration: Duration) = Instant(millis + duration.millis)
+
+  override def compareTo(o: Instant): Int = millis.compareTo(o.millis)
 }
