@@ -208,8 +208,6 @@ class InstantSpec extends WordSpec with Matchers with MockitoSugar {
     }
   }
 
-  "The "
-
   "The string representation of an Instant object" should {
 
     "be the ISO8601 format with milliseconds, in the UTC timezone" in {
