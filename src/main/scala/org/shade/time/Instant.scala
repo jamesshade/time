@@ -41,7 +41,6 @@ case class Instant(millis: Long) extends Comparable[Instant] {
   def timeSince(pastInstant: Instant) = Duration(millis - pastInstant.millis)
   def timeBetween(otherInstant: Instant) = timeSince(otherInstant).abs
 
-  // TODO [JJS] Test below:
   def - (duration: Duration) = Instant(millis - duration.millis)
 
   def + (duration: Duration) = Instant(millis + duration.millis)

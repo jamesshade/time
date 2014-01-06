@@ -296,5 +296,78 @@ class InstantSpec extends WordSpec with Matchers with MockitoSugar {
       Instant(-4334L).timeBetween(Instant(0L)) shouldBe Duration(4334L)
     }
   }
+
+  "The instant minus duration operator" should {
+
+    "Return an identical instant if the duration is zero" in {
+      Instant(435435L) - Duration(0L) shouldBe Instant(435435L)
+    }
+
+    "Return an instant earlier than this if the duration is positive" in {
+      Instant(435435L) - Duration(1L) shouldBe Instant(435434L)
+      Instant(435435L) - Duration(435435L) shouldBe Instant(0L)
+      Instant(-1000L) - Duration(1000L) shouldBe Instant(-2000L)
+    }
+
+    "Return an instant later than this if the duration is positive" in {
+      Instant(435435L) - Duration(-1L) shouldBe Instant(435436L)
+      Instant(435435L) - Duration(-435435L) shouldBe Instant(870870L)
+      Instant(-1000L) - Duration(-1000L) shouldBe Instant(0L)
+    }
+  }
+
+  "The instant plus duration operator" should {
+
+    "Return an identical instant if the duration is zero" in {
+      Instant(435435L) + Duration(0L) shouldBe Instant(435435L)
+    }
+
+    "Return an instant later than this if the duration is positive" in {
+      Instant(435435L) + Duration(1L) shouldBe Instant(435436L)
+      Instant(435435L) + Duration(435435L) shouldBe Instant(870870L)
+      Instant(-1000L) + Duration(1000L) shouldBe Instant(0L)
+    }
+
+    "Return an instant earlier than this if the duration is positive" in {
+      Instant(435435L) + Duration(-1L) shouldBe Instant(435434L)
+      Instant(435435L) + Duration(-435435L) shouldBe Instant(0L)
+      Instant(-1000L) + Duration(-1000L) shouldBe Instant(-2000L)
+    }
+  }
+
+  "The compareTo method" should {
+
+    "return -1 if this Instant is earlier than that passed in" in {
+      Instant(-1).compareTo(Instant(0)) shouldBe -1
+      Instant(0).compareTo(Instant(1)) shouldBe -1
+      Instant(-14345435).compareTo(Instant(45345435)) shouldBe -1
+      Instant(-1000).compareTo(Instant(-999)) shouldBe -1
+      Instant(999).compareTo(Instant(1000)) shouldBe -1
+      Instant(-10000).compareTo(Instant(1000)) shouldBe -1
+    }
+
+    "return 0 if this Instant is the same as that passed in" in {
+      Instant(-1).compareTo(Instant(-1)) shouldBe 0
+      Instant(0).compareTo(Instant(0)) shouldBe 0
+      Instant(1).compareTo(Instant(1)) shouldBe 0
+      Instant(-14345435).compareTo(Instant(-14345435)) shouldBe 0
+      Instant(-45345435).compareTo(Instant(-45345435)) shouldBe 0
+      Instant(-1000).compareTo(Instant(-1000)) shouldBe 0
+      Instant(-999).compareTo(Instant(-999)) shouldBe 0
+      Instant(999).compareTo(Instant(999)) shouldBe 0
+      Instant(1000).compareTo(Instant(1000)) shouldBe 0
+      Instant(-10000).compareTo(Instant(-10000)) shouldBe 0
+      Instant(1000).compareTo(Instant(1000)) shouldBe 0
+    }
+
+    "return 1 if this Instant is later than that passed in" in {
+      Instant(0).compareTo(Instant(-1)) shouldBe 1
+      Instant(1).compareTo(Instant(0)) shouldBe 1
+      Instant(45345435).compareTo(Instant(-14345435)) shouldBe 1
+      Instant(-999).compareTo(Instant(-1000)) shouldBe 1
+      Instant(1000).compareTo(Instant(999)) shouldBe 1
+      Instant(1000).compareTo(Instant(-10000)) shouldBe 1
+    }
+  }
 }
 
