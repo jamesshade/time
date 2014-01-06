@@ -219,5 +219,82 @@ class InstantSpec extends WordSpec with Matchers with MockitoSugar {
       Instant(564564566445L).toString shouldBe "1987-11-22T07:29:26.445Z"
     }
   }
+
+  "The timeUntil method" should {
+
+    "return zero for two copies of the same instant" in {
+      val instant = Instant(45435435435L)
+      instant.timeUntil(instant) shouldBe Duration(0)
+    }
+
+    "return zero for two identical instants" in {
+      val instant1 = Instant(45435435435L)
+      val instant2 = Instant(45435435435L)
+      instant1.timeUntil(instant2) shouldBe Duration(0)
+    }
+
+    "return a Duration representing the number of milliseconds until the supplied instant" in {
+      Instant(1000L).timeUntil(Instant(1001L)) shouldBe Duration(1L)
+      Instant(176865765L).timeUntil(Instant(435435435L)) shouldBe Duration(258569670L)
+      Instant(-4334L).timeUntil(Instant(0L)) shouldBe Duration(4334L)
+    }
+
+    "return a negative Duration if the time is before the time this instant holds" in {
+      Instant(1001L).timeUntil(Instant(1000L)) shouldBe Duration(-1L)
+      Instant(435435435L).timeUntil(Instant(176865765L)) shouldBe Duration(-258569670L)
+      Instant(0L).timeUntil(Instant(-4334L)) shouldBe Duration(-4334L)
+    }
+  }
+
+  "The timeSince method" should {
+
+    "return zero for two copies of the same instant" in {
+      val instant = Instant(45435435435L)
+      instant.timeSince(instant) shouldBe Duration(0)
+    }
+
+    "return zero for two identical instants" in {
+      val instant1 = Instant(45435435435L)
+      val instant2 = Instant(45435435435L)
+      instant1.timeSince(instant2) shouldBe Duration(0)
+    }
+
+    "return a Duration representing the number of milliseconds since the supplied instant" in {
+      Instant(1001L).timeSince(Instant(1000L)) shouldBe Duration(1L)
+      Instant(435435435L).timeSince(Instant(176865765L)) shouldBe Duration(258569670L)
+      Instant(0L).timeSince(Instant(-4334L)) shouldBe Duration(4334L)
+    }
+
+    "return a negative Duration if the time is after the time this instant holds" in {
+      Instant(1000L).timeSince(Instant(1001L)) shouldBe Duration(-1L)
+      Instant(176865765L).timeSince(Instant(435435435L)) shouldBe Duration(-258569670L)
+      Instant(-4334L).timeSince(Instant(0L)) shouldBe Duration(-4334L)
+    }
+  }
+
+  "The timeBetween method" should {
+
+    "return zero for two copies of the same instant" in {
+      val instant = Instant(45435435435L)
+      instant.timeSince(instant) shouldBe Duration(0)
+    }
+
+    "return zero for two identical instants" in {
+      val instant1 = Instant(45435435435L)
+      val instant2 = Instant(45435435435L)
+      instant1.timeSince(instant2) shouldBe Duration(0)
+    }
+
+    "return a Duration representing the size of the gap between the two instants, always positive regardless of which instant comes first" in {
+      Instant(1001L).timeBetween(Instant(1000L)) shouldBe Duration(1L)
+      Instant(1000L).timeBetween(Instant(1001L)) shouldBe Duration(1L)
+
+      Instant(435435435L).timeBetween(Instant(176865765L)) shouldBe Duration(258569670L)
+      Instant(176865765L).timeBetween(Instant(435435435L)) shouldBe Duration(258569670L)
+
+      Instant(0L).timeBetween(Instant(-4334L)) shouldBe Duration(4334L)
+      Instant(-4334L).timeBetween(Instant(0L)) shouldBe Duration(4334L)
+    }
+  }
 }
 

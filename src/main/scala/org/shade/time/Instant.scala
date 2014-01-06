@@ -17,7 +17,6 @@ package org.shade.time
 
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-import sun.security.jca.GetInstance.Instance
 
 case class Instant(millis: Long) extends Comparable[Instant] {
 
@@ -37,12 +36,12 @@ case class Instant(millis: Long) extends Comparable[Instant] {
   def isAfter(instant: Instant) = millis > instant.millis
   val > = isAfter _
 
-  // TODO [JJS] Test below:
 
   def timeUntil(futureInstant: Instant) = Duration(futureInstant.millis - millis)
   def timeSince(pastInstant: Instant) = Duration(millis - pastInstant.millis)
   def timeBetween(otherInstant: Instant) = timeSince(otherInstant).abs
 
+  // TODO [JJS] Test below:
   def - (duration: Duration) = Instant(millis - duration.millis)
 
   def + (duration: Duration) = Instant(millis + duration.millis)
