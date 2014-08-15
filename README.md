@@ -27,7 +27,7 @@ The first intention, making time-handling Scala friendly is achieved (or at leas
 
 The second intention is more tricky, but some points are:
 
-* Instant has no concept of chronology or time zone.  It's an instant in time with a clear definition.  Two times are equal if they represent the same instant (unlike Joda instants, which embed a date time and aren't considered equal even if they represent the same instant - see the differences between equals and isEqual methods in Joda DateTime).  The only place we assume anything about chronology or timezone is in the "toString" method (with displays an ISO8601 version of the Time in the ISO chronology with UTC timezone).
+* Instant has no concept of chronology or time zone.  It's an instant in time with a clear definition.  Two times are equal if they represent the same instant (unlike Joda instants, which embed a timezone and aren't considered equal even if they represent the same instant - see the differences between equals and isEqual methods in Joda DateTime).  The only place we assume anything about chronology or timezone is in the "toString" method (with displays an ISO8601 version of the Time in the ISO chronology with UTC timezone).
 
 * Date has no concept of time zone.  A date is just that - a representation of a day/month/year date in the ISO chronology unattached to any particular location (unfortunately the concept of a "date" has no meaning without chronology - in our case we use the chronology to validate the values in the Date upon construction).
 
