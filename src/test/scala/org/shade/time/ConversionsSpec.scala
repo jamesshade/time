@@ -25,12 +25,12 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
 
   import Conversions._
 
-  private val copticCaracas = CopticChronology.getInstance(DateTimeZone.forID("America/Caracas"))
-  private val islamicIstanbul = IslamicChronology.getInstance(DateTimeZone.forID("Europe/Istanbul"))
-  private val gregorianGuatemala = GregorianChronology.getInstance(DateTimeZone.forID("America/Guatemala"))
-  private val buddhistBudapest = BuddhistChronology.getInstance(DateTimeZone.forID("Europe/Budapest"))
+  private val CopticCaracas = CopticChronology.getInstance(DateTimeZone.forID("America/Caracas"))
+  private val IslamicIstanbul = IslamicChronology.getInstance(DateTimeZone.forID("Europe/Istanbul"))
+  private val GregorianGuatemala = GregorianChronology.getInstance(DateTimeZone.forID("America/Guatemala"))
+  private val BuddhistBudapest = BuddhistChronology.getInstance(DateTimeZone.forID("Europe/Budapest"))
 
-  private val sydney = DateTimeZone.forID("Australia/Sydney")
+  private val Sydney = DateTimeZone.forID("Australia/Sydney")
 
   "Assigning a Time to a Long" should {
 
@@ -71,27 +71,27 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
   "Assigning a Time from a Joda Instant" should {
 
     "produce the right Time (regardless of the chronology and timezone #1)" in {
-      val instant: Instant = new DateTime(100000L, isoUtc)
+      val instant: Instant = new DateTime(100000L, IsoUtc)
       instant shouldBe Instant(100000L)
     }
 
     "produce the right Time (regardless of the chronology and timezone #2)" in {
-      val instant: Instant = new DateTime(100000L, copticCaracas)
+      val instant: Instant = new DateTime(100000L, CopticCaracas)
       instant shouldBe Instant(100000L)
     }
 
     "produce the right Time (regardless of the chronology and timezone #3)" in {
-      val instant: Instant = new DateTime(100000L, islamicIstanbul)
+      val instant: Instant = new DateTime(100000L, IslamicIstanbul)
       instant shouldBe Instant(100000L)
     }
 
     "produce the right Time (regardless of the chronology and timezone #4)" in {
-      val instant: Instant = new DateTime(100000L, gregorianGuatemala)
+      val instant: Instant = new DateTime(100000L, GregorianGuatemala)
       instant shouldBe Instant(100000L)
     }
 
     "produce the right Time (regardless of the chronology and timezone #5)" in {
-      val instant: Instant = new DateTime(100000L, buddhistBudapest)
+      val instant: Instant = new DateTime(100000L, BuddhistBudapest)
       instant shouldBe Instant(100000L)
     }
 
@@ -106,7 +106,7 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "return a Time object representing the same instant" in {
-      val instant: Instant = new DateTime(45345435367L, isoUtc)
+      val instant: Instant = new DateTime(45345435367L, IsoUtc)
       instant shouldBe Instant(45345435367L)
     }
 
@@ -130,55 +130,55 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
 
     "produce the right DateTime with ISO chronology and UTC timezone #1" in {
       val joda: DateTime = Instant(100000L)
-      joda shouldBe new DateTime(100000L, isoUtc)
+      joda shouldBe new DateTime(100000L, IsoUtc)
     }
 
     "produce the right DateTime with ISO chronology and UTC timezone #2" in {
       val joda: DateTime = Zone("Europe/London")(2013, 10, 22, 11, 44, 33, 234)
       joda should not be new DateTime(2013, 10, 22, 11, 44, 33, 234, DateTimeZone.forID("Europe/London"))
-      joda shouldBe new DateTime(2013, 10, 22, 10, 44, 33, 234, isoUtc)
+      joda shouldBe new DateTime(2013, 10, 22, 10, 44, 33, 234, IsoUtc)
     }
 
     "produce the right DateTime with ISO chronology and UTC timezone #3" in {
       val joda: DateTime = Instant(381386682010L)
-      joda shouldBe new DateTime(381386682010L, isoUtc)
+      joda shouldBe new DateTime(381386682010L, IsoUtc)
     }
 
     "produce the right DateTime with ISO chronology and UTC timezone #4" in {
       val joda: DateTime = Instant(-381386682010L)
-      joda shouldBe new DateTime(-381386682010L, isoUtc)
+      joda shouldBe new DateTime(-381386682010L, IsoUtc)
     }
 
     "produce the right DateTime with ISO chronology and UTC timezone #5" in {
       val joda: DateTime = Instant(1231231232L)
-      joda shouldBe new DateTime(1231231232L, isoUtc)
+      joda shouldBe new DateTime(1231231232L, IsoUtc)
     }
   }
 
   "Assigning a Date from a Joda LocalDate" should {
 
     "create a Date containing the correct day, month and year (converting to ISO Chronology and ignoring timezone) #1" in {
-      val date: Date = new LocalDate(1730, 2, 7, copticCaracas)
+      val date: Date = new LocalDate(1730, 2, 7, CopticCaracas)
       date shouldBe Date(2013, 10, 17)
     }
 
     "create a Date containing the correct day, month and year (converting to ISO Chronology and ignoring timezone) #2a" in {
-      val date: Date = new LocalDate(2013, 11, 22, islamicIstanbul)
+      val date: Date = new LocalDate(2013, 11, 22, IslamicIstanbul)
       date shouldBe Date(2575, 7, 2)
     }
 
     "create a Date containing the correct day, month and year (converting to ISO Chronology and ignoring timezone) #2b" in {
-      val date: Date = new LocalDate(1434, 12, 12, islamicIstanbul)
+      val date: Date = new LocalDate(1434, 12, 12, IslamicIstanbul)
       date shouldBe Date(2013, 10, 17)
     }
 
     "create a Date containing the correct day, month and year (converting to ISO Chronology and ignoring timezone) #3" in {
-        val date: Date = new LocalDate(2013, 11, 22, gregorianGuatemala)
+        val date: Date = new LocalDate(2013, 11, 22, GregorianGuatemala)
         date shouldBe Date(2013, 11, 22)
     }
 
     "create a Date containing the correct day, month and year (converting to ISO Chronology and ignoring timezone) #5" in {
-      val date: Date = new LocalDate(2556, 10, 17, buddhistBudapest)
+      val date: Date = new LocalDate(2556, 10, 17, BuddhistBudapest)
       date shouldBe Date(2013, 10, 17)
     }
 
@@ -188,7 +188,7 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #2" in {
-      val date: Date = new LocalDate(2013, 4, 22, GregorianChronology.getInstance(sydney, 5))
+      val date: Date = new LocalDate(2013, 4, 22, GregorianChronology.getInstance(Sydney, 5))
       date shouldBe Date(2013, 4, 22)
     }
 
@@ -198,7 +198,7 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #4" in {
-      val date: Date = new LocalDate(2013, 2, 21, GregorianChronology.getInstance(sydney, 2))
+      val date: Date = new LocalDate(2013, 2, 21, GregorianChronology.getInstance(Sydney, 2))
       date shouldBe Date(2013, 2, 21)
     }
 
@@ -208,7 +208,7 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #6" in {
-      val date: Date = new LocalDate(2013, 4, 22, CopticChronology.getInstance(sydney, 1))
+      val date: Date = new LocalDate(2013, 4, 22, CopticChronology.getInstance(Sydney, 1))
       date shouldBe Date(2297, 1, 2)
     }
 
@@ -218,7 +218,7 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "create the correct date, ignoring the timezone associated with the LocalDate and converting from the chronology assigned to the LocalDate to the equivalent ISO chronology date #8" in {
-      val date: Date = new LocalDate(2013, 2, 21, CopticChronology.getInstance(sydney, 1))
+      val date: Date = new LocalDate(2013, 2, 21, CopticChronology.getInstance(Sydney, 1))
       date shouldBe Date(2296, 11, 2)
     }
   }
@@ -227,38 +227,38 @@ class ConversionsSpec extends WordSpec with Matchers with MockitoSugar {
 
     "produce the right LocalDate with ISO chronology and UTC timezone #1" in {
       val joda: LocalDate = Date(2013, 11, 22)
-      joda shouldBe new LocalDate(2013, 11, 22, isoUtc)
+      joda shouldBe new LocalDate(2013, 11, 22, IsoUtc)
     }
 
     "produce the right LocalDate with ISO chronology and UTC timezone #2" in {
       val joda: LocalDate = Date(1945, 12, 1)
-      joda shouldBe new LocalDate(1945, 12, 1, isoUtc)
+      joda shouldBe new LocalDate(1945, 12, 1, IsoUtc)
     }
 
     "produce the right LocalDate with ISO chronology and UTC timezone #3" in {
       val joda: LocalDate = Date(1066, 1, 11)
-      joda shouldBe new LocalDate(1066, 1, 11, isoUtc)
+      joda shouldBe new LocalDate(1066, 1, 11, IsoUtc)
     }
 
     "produce the right LocalDate with ISO chronology and UTC timezone #4" in {
       val joda: LocalDate = Date(1492, 12, 22)
-      joda shouldBe new LocalDate(1492, 12, 22, isoUtc)
+      joda shouldBe new LocalDate(1492, 12, 22, IsoUtc)
     }
 
     "produce the right LocalDate with ISO chronology and UTC timezone #5" in {
       val joda: LocalDate = Date(2013, 6, 22)
-      joda shouldBe new LocalDate(2013, 6, 22, isoUtc)
+      joda shouldBe new LocalDate(2013, 6, 22, IsoUtc)
     }
 
     "produce the right LocalDate with ISO chronology and UTC timezone #6" in {
       val joda: LocalDate = Date(-3424, 12, 31)
-      joda shouldBe new LocalDate(-3424, 12, 31, isoUtc)
+      joda shouldBe new LocalDate(-3424, 12, 31, IsoUtc)
     }
 
 
     "produce the right LocalDate with ISO chronology and UTC timezone #7" in {
       val joda: LocalDate = Date(1959, 1, 1)
-      joda shouldBe new LocalDate(1959, 1, 1, isoUtc)
+      joda shouldBe new LocalDate(1959, 1, 1, IsoUtc)
     }
   }
 

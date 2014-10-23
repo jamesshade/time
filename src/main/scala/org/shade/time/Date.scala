@@ -20,7 +20,7 @@ import org.joda.time.LocalDate
 case class Date(year: Int, month: Int, day: Int) {
 
   try {
-    new LocalDate(year, month, day, isoUtc)
+    new LocalDate(year, month, day, IsoUtc)
   } catch {
     case e: Exception => throw InvalidDateException(year, month, day, e)
   }

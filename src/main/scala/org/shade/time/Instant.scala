@@ -20,7 +20,7 @@ import org.joda.time.format.ISODateTimeFormat
 
 case class Instant(millis: Long) extends Comparable[Instant] {
 
-  override lazy val toString = ISODateTimeFormat.dateTime.print(new DateTime(millis, isoUtc))
+  override lazy val toString = ISODateTimeFormat.dateTime.print(new DateTime(millis, IsoUtc))
 
   def isBefore(instant: Instant) = millis < instant.millis
   val < = isBefore _
