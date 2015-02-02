@@ -39,7 +39,7 @@ object Conversions {
     Date(date.getYear, date.getMonthOfYear, date.getDayOfMonth)
   }
 
-  implicit def zoneToJoda(zone: Zone) = zone.joda
+  implicit def zoneToJoda(zone: Zone): DateTimeZone = zone.joda
 
-  implicit def zoneFromJoda(joda: DateTimeZone) = Zone(joda.getID)
+  implicit def zoneFromJoda(joda: DateTimeZone): Zone = Zone(joda.getID)
 }
