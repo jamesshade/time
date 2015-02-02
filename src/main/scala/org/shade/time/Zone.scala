@@ -19,9 +19,6 @@ import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.chrono.ISOChronology
 import org.shade.Assertions._
 
-// TODO [JJS] IS THE CONCEPT OF EQUALITY OKAY HERE?  SHOULDN'T GMT == "+0000" == "+00:00" ?
-// TODO [JJS] notNull CHECKS - necessary? is use consistent (e.g. everywhere or not at all)?
-
 case class Zone(id: String) {
 
   notNull("id" -> id)
