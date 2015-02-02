@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013 James Shade
+ *  Copyright 2013-2015 James Shade
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -22,21 +22,27 @@ class AssertionsSpec extends WordSpec with Matchers with MockitoSugar {
 
   import Assertions._
 
-  private val nullString: String = null
+  private val NullString: String = null
 
   "Calling notNull" should {
 
     "Throw an AssertionError if the input is null" in {
       val nullSeq: Seq[(String, Any)] = null
-      val thrown = evaluating(notNull(nullSeq:_*)) should produce [AssertionError]
+      val thrown = the [AssertionError] thrownBy notNull(nullSeq:_*)
       thrown.getMessage shouldBe "Parameters are null"
     }
 
+    "Throw an AssertionError if any of the tuples in the sequence are null" in {
+      val NullTuple: (String, String) = null
+      val thrown = the [AssertionError] thrownBy notNull("a" -> "blah", NullTuple, "b" -> 5)
+      thrown.getMessage shouldBe "Parameter tuple is null"
+    }
+
     "Throw an AssertionError if any of the names in the input are null" in {
-      val thrown1 = evaluating(notNull(nullString -> "blah")) should produce [AssertionError]
+      val thrown1 = the [AssertionError] thrownBy notNull(NullString -> "blah")
       thrown1.getMessage shouldBe "Parameter name is null"
 
-      val thrown2 = evaluating(notNull("a" -> "blah", "b" -> 5, nullString -> "hello", "d" -> true)) should produce [AssertionError]
+      val thrown2 = the [AssertionError] thrownBy notNull("a" -> "blah", "b" -> 5, NullString -> "hello", "d" -> true)
       thrown2.getMessage shouldBe "Parameter name is null"
     }
 
@@ -49,9 +55,8 @@ class AssertionsSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "throw a NullPointerException with an appropriate message if any of the parameters is null" in {
-      val thrown = evaluating(notNull("a" -> "blah", "b" -> 5, "c" -> null, "d" -> true)) should produce [NullPointerException]
+      val thrown = the [NullPointerException] thrownBy notNull("a" -> "blah", "b" -> 5, "c" -> null, "d" -> true)
       thrown.getMessage shouldBe "Parameter 'c' is null"
     }
-
   }
 }
