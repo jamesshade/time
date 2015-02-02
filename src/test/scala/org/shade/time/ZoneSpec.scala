@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013 James Shade
+ *  Copyright 2013-2015 James Shade
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -47,27 +47,27 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
 
     "throw a NullPointerException if the Zone is null" in {
       val str: String = null
-      val thrown = evaluating(Zone(str)) should produce [NullPointerException]
+      val thrown = the [NullPointerException] thrownBy Zone(str)
       thrown.getMessage shouldBe "Parameter 'id' is null"
     }
 
     "throw an InvalidZoneException if the Zone is empty" in {
-      val thrown = evaluating(Zone("")) should produce [InvalidZoneException]
+      val thrown = the [InvalidZoneException] thrownBy Zone("")
       thrown.getMessage should startWith ("Unknown/invalid time zone ''")
     }
 
     "throw an InvalidZoneException if the Zone is invalid #1" in {
-      val thrown = evaluating(Zone("+blah:blah")) should produce [InvalidZoneException]
+      val thrown = the [InvalidZoneException] thrownBy Zone("+blah:blah")
       thrown.getMessage should startWith ("Unknown/invalid time zone '+blah:blah'")
     }
 
     "throw an InvalidZoneException if the Zone is invalid #2" in {
-      val thrown = evaluating(Zone("+55:00")) should produce [InvalidZoneException]
+      val thrown = the [InvalidZoneException] thrownBy Zone("+55:00")
       thrown.getMessage should startWith ("Unknown/invalid time zone '+55:00'")
     }
 
     "throw an InvalidZoneException if the Zone is invalid #3" in {
-      val thrown = evaluating(Zone("Europe/Atlantis")) should produce [InvalidZoneException]
+      val thrown = the [InvalidZoneException] thrownBy Zone("Europe/Atlantis")
       thrown.getMessage should startWith ("Unknown/invalid time zone 'Europe/Atlantis'")
     }
   }
@@ -117,22 +117,22 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "throw an InvalidDateException if there are invalid values in the date fields" in {
-      evaluating(utc(1900, 2, 29, 11, 33, 22, 222)) should produce [InvalidDateException]
-      evaluating(utc(2000, 2, 30, 11, 33, 22, 222)) should produce [InvalidDateException]
+      an [InvalidDateException] should be thrownBy utc(1900, 2, 29, 11, 33, 22, 222)
+      an [InvalidDateException] should be thrownBy utc(2000, 2, 30, 11, 33, 22, 222)
     }
 
     "throw an InvalidTimeException if there are invalid values in the time fields" in {
-      evaluating(utc(2013, 8, 25, 12, 60, 22, 222)) should produce [InvalidTimeException]
-      evaluating(utc(2013, 4, 22, 11, 33, 22, 1000)) should produce [InvalidTimeException]
+      an [InvalidTimeException] should be thrownBy utc(2013, 8, 25, 12, 60, 22, 222)
+      an [InvalidTimeException] should be thrownBy utc(2013, 4, 22, 11, 33, 22, 1000)
     }
 
     "throw an InvalidDateException if there are invalid values in both the date fields and the time fields" in {
-      evaluating(utc(1900, 2, 29, 24, 33, 22, 222)) should produce [InvalidDateException]
-      evaluating(utc(2000, 2, 30, 11, -1, 22, 222)) should produce [InvalidDateException]
+      an [InvalidDateException] should be thrownBy utc(1900, 2, 29, 24, 33, 22, 222)
+      an [InvalidDateException] should be thrownBy utc(2000, 2, 30, 11, -1, 22, 222)
     }
 
     "throw an InvalidTimeInZone exception if the time is invalid due to daylight savings time changes in a given zone" in {
-      evaluating(london(2013, 3, 31, 1, 30, 25, 222)) should produce [InvalidTimeInZoneException]
+      an [InvalidTimeInZoneException] should be thrownBy london(2013, 3, 31, 1, 30, 25, 222)
     }
   }
 
@@ -148,7 +148,7 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "throw an exception if the time is invalid due to daylight savings time changes in a given zone" in {
-      evaluating(london(DateAndTime(2013, 3, 31, 1, 30, 25, 222))) should produce [InvalidTimeInZoneException]
+      an [InvalidTimeInZoneException] should be thrownBy london(DateAndTime(2013, 3, 31, 1, 30, 25, 222))
     }
   }
 
@@ -164,7 +164,7 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "throw an exception if the time is invalid due to daylight savings time changes in a given zone" in {
-      evaluating(london(Date(2013, 3, 31), Time(1, 30, 25, 222))) should produce [InvalidTimeInZoneException]
+      an [InvalidTimeInZoneException] should be thrownBy london(Date(2013, 3, 31), Time(1, 30, 25, 222))
     }
   }
 
@@ -174,9 +174,9 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
       val instant = Instant(new DateTime(2013, 6, 22, 11, 55, 22, 666, DateTimeZone.UTC).getMillis)
 
       val x = instant match {
-        case london(2013, 6, 22, 11, 55, 22, 666) => throw new AssertionError("This is the UTC time not the UK time")
+        case london(2013, 6, 22, 11, 55, 22, 666) => fail("This is the UTC time not the UK time")
         case london(2013, 6, 22, 12, 55, 22, 666) => "correct!"
-        case _ => throw new AssertionError("Didn't match")
+        case _ => fail("Didn't match")
       }
 
       x shouldBe "correct!"
@@ -186,9 +186,9 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
       val instant = Instant(new DateTime(2013, 6, 22, 15, 55, 22, 666, DateTimeZone.UTC).getMillis)
 
       val x = instant match {
-        case sydney(2013, 6, 22, 11, 55, 22, 666) => throw new AssertionError("This is the UTC time not the Australia time")
+        case sydney(2013, 6, 22, 11, 55, 22, 666) => fail("This is the UTC time not the Australian time")
         case sydney(2013, 6, 23, 1, 55, 22, 666) => "correct!"
-        case _ => throw new AssertionError("Didn't match")
+        case _ => fail("Didn't match")
       }
 
       x shouldBe "correct!"

@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013 James Shade
+ *  Copyright 2013-2015 James Shade
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -52,104 +52,104 @@ class DateAndTimeSpec extends WordSpec with Matchers {
     }
 
     "throw an InvalidDateException if the month is less than the minimum" in {
-      assertDateException(evaluating(DateAndTime(2013, 0, 2, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 0, 2)
-      assertDateException(evaluating(DateAndTime(2013, -100, 2, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, -100, 2)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 0, 2, 16, 23, 45, 345), 2013, 0, 2)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, -100, 2, 16, 23, 45, 345), 2013, -100, 2)
     }
 
     "throw an InvalidDateException if the day is less than the minimum" in {
-      assertDateException(evaluating(DateAndTime(2013, 11, 0, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 11, 0)
-      assertDateException(evaluating(DateAndTime(2013, 11, -100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 11, -100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 11, 0, 16, 23, 45, 345), 2013, 11, 0)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 11, -100, 16, 23, 45, 345), 2013, 11, -100)
     }
 
     "throw an InvalidDateException if the month is greater than the maximum" in {
-      assertDateException(evaluating(DateAndTime(2013, 13, 2, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 13, 2)
-      assertDateException(evaluating(DateAndTime(2013, 100, 2, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 100, 2)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 13, 2, 16, 23, 45, 345), 2013, 13, 2)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 100, 2, 16, 23, 45, 345), 2013, 100, 2)
     }
 
     "throw an InvalidDateException if the day is greater than the maximum" in {
 
-      assertDateException(evaluating(DateAndTime(2013, 1, 32, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 1, 32)
-      assertDateException(evaluating(DateAndTime(2013, 1, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 1, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 1, 32, 16, 23, 45, 345), 2013, 1, 32)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 1, 100, 16, 23, 45, 345), 2013, 1, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 2, 29, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 2, 29)
-      assertDateException(evaluating(DateAndTime(2013, 2, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 2, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 2, 29, 16, 23, 45, 345), 2013, 2, 29)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 2, 100, 16, 23, 45, 345), 2013, 2, 100)
 
-      assertDateException(evaluating(DateAndTime(2012, 2, 30, 16, 23, 45, 345)) should produce [InvalidDateException], 2012, 2, 30)
-      assertDateException(evaluating(DateAndTime(2012, 2, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2012, 2, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2012, 2, 30, 16, 23, 45, 345), 2012, 2, 30)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2012, 2, 100, 16, 23, 45, 345), 2012, 2, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 3, 32, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 3, 32)
-      assertDateException(evaluating(DateAndTime(2013, 3, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 3, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 3, 32, 16, 23, 45, 345), 2013, 3, 32)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 3, 100, 16, 23, 45, 345), 2013, 3, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 4, 31, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 4, 31)
-      assertDateException(evaluating(DateAndTime(2013, 4, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 4, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 4, 31, 16, 23, 45, 345), 2013, 4, 31)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 4, 100, 16, 23, 45, 345), 2013, 4, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 5, 32, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 5, 32)
-      assertDateException(evaluating(DateAndTime(2013, 5, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 5, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 5, 32, 16, 23, 45, 345), 2013, 5, 32)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 5, 100, 16, 23, 45, 345), 2013, 5, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 6, 31, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 6, 31)
-      assertDateException(evaluating(DateAndTime(2013, 6, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 6, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 6, 31, 16, 23, 45, 345), 2013, 6, 31)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 6, 100, 16, 23, 45, 345), 2013, 6, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 7, 32, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 7, 32)
-      assertDateException(evaluating(DateAndTime(2013, 7, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 7, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 7, 32, 16, 23, 45, 345), 2013, 7, 32)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 7, 100, 16, 23, 45, 345), 2013, 7, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 8, 32, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 8, 32)
-      assertDateException(evaluating(DateAndTime(2013, 8, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 8, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 8, 32, 16, 23, 45, 345), 2013, 8, 32)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 8, 100, 16, 23, 45, 345), 2013, 8, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 9, 31, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 9, 31)
-      assertDateException(evaluating(DateAndTime(2013, 9, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 9, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 9, 31, 16, 23, 45, 345), 2013, 9, 31)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 9, 100, 16, 23, 45, 345), 2013, 9, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 10, 32, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 10, 32)
-      assertDateException(evaluating(DateAndTime(2013, 10, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 10, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 10, 32, 16, 23, 45, 345), 2013, 10, 32)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 10, 100, 16, 23, 45, 345), 2013, 10, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 11, 31, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 11, 31)
-      assertDateException(evaluating(DateAndTime(2013, 11, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 11, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 11, 31, 16, 23, 45, 345), 2013, 11, 31)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 11, 100, 16, 23, 45, 345), 2013, 11, 100)
 
-      assertDateException(evaluating(DateAndTime(2013, 12, 32, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 12, 32)
-      assertDateException(evaluating(DateAndTime(2013, 12, 100, 16, 23, 45, 345)) should produce [InvalidDateException], 2013, 12, 100)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 12, 32, 16, 23, 45, 345), 2013, 12, 32)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 12, 100, 16, 23, 45, 345), 2013, 12, 100)
     }
 
     "throw an InvalidTimeException if the hour is less than the minimum" in {
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, -1, 23, 45, 345)) should produce [InvalidTimeException], -1, 23, 45, 345)
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, -100, 23, 45, 345)) should produce [InvalidTimeException], -100, 23, 45, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, -1, 23, 45, 345), -1, 23, 45, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, -100, 23, 45, 345), -100, 23, 45, 345)
     }
 
     "throw an InvalidTimeException if the minute is less than the minimum" in {
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, -1, 45, 345)) should produce [InvalidTimeException], 16, -1, 45, 345)
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, -100, 45, 345)) should produce [InvalidTimeException], 16, -100, 45, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, -1, 45, 345), 16, -1, 45, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, -100, 45, 345), 16, -100, 45, 345)
     }
 
     "throw an InvalidTimeException if the second is less than the minimum" in {
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 23, -1, 345)) should produce [InvalidTimeException], 16, 23, -1, 345)
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 23, -100, 345)) should produce [InvalidTimeException], 16, 23, -100, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 23, -1, 345), 16, 23, -1, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 23, -100, 345), 16, 23, -100, 345)
     }
 
     "throw an InvalidTimeException if the millisecond is less than the minimum" in {
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 23, 45, -1)) should produce [InvalidTimeException], 16, 23, 45, -1)
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 23, 45, -1000)) should produce [InvalidTimeException], 16, 23, 45, -1000)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 23, 45, -1), 16, 23, 45, -1)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 23, 45, -1000), 16, 23, 45, -1000)
     }
 
     "throw an InvalidTimeException if the hour is greater than the maximum" in {
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 24, 23, 45, 345)) should produce [InvalidTimeException], 24, 23, 45, 345)
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 100, 23, 45, 345)) should produce [InvalidTimeException], 100, 23, 45, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 24, 23, 45, 345), 24, 23, 45, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 100, 23, 45, 345), 100, 23, 45, 345)
     }
 
     "throw an InvalidTimeException if the minute is greater than the maximum" in {
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 60, 45, 345)) should produce [InvalidTimeException], 16, 60, 45, 345)
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 100, 45, 345)) should produce [InvalidTimeException], 16, 100, 45, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 60, 45, 345), 16, 60, 45, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 100, 45, 345), 16, 100, 45, 345)
     }
 
     "throw an InvalidTimeException if the second is greater than the maximum" in {
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 23, 60, 345)) should produce [InvalidTimeException], 16, 23, 60, 345)
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 23, 100, 345)) should produce [InvalidTimeException], 16, 23, 100, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 23, 60, 345), 16, 23, 60, 345)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 23, 100, 345), 16, 23, 100, 345)
     }
 
     "throw an InvalidTimeException if the millisecond is greater than the maximum" in {
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 23, 45, 1000)) should produce [InvalidTimeException], 16, 23, 45, 1000)
-      assertTimeException(evaluating(DateAndTime(2013, 11, 2, 16, 23, 45, 10000)) should produce [InvalidTimeException], 16, 23, 45, 10000)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 23, 45, 1000), 16, 23, 45, 1000)
+      assertTimeException(the [InvalidTimeException] thrownBy DateAndTime(2013, 11, 2, 16, 23, 45, 10000), 16, 23, 45, 10000)
     }
 
     "throw an InvalidDateException if both the date and time are invalid" in {
-      assertDateException(evaluating(DateAndTime(2013, 0, 22, 24, 44, 33, 1000)) should produce [InvalidDateException], 2013, 0, 22)
+      assertDateException(the [InvalidDateException] thrownBy DateAndTime(2013, 0, 22, 24, 44, 33, 1000), 2013, 0, 22)
     }
   }
 
@@ -177,7 +177,7 @@ class DateAndTimeSpec extends WordSpec with Matchers {
 
   "The toString method" should {
     "return the expected String format of the time" in {
-      DateAndTime(minYear, 1, 1, 0, 0, 0, 0).toString shouldBe s"${minYear}-01-01T00:00:00.000"
+      DateAndTime(minYear, 1, 1, 0, 0, 0, 0).toString shouldBe s"$minYear-01-01T00:00:00.000"
       DateAndTime(1955, 12, 6, 11, 22, 55, 222).toString shouldBe "1955-12-06T11:22:55.222"
       DateAndTime(0, 1, 2, 1, 3, 4, 5).toString shouldBe "0000-01-02T01:03:04.005"
       DateAndTime(1970, 8, 31, 16, 25, 12, 13).toString shouldBe "1970-08-31T16:25:12.013"

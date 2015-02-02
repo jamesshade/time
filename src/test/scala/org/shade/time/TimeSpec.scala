@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013 James Shade
+ *  Copyright 2013-2015 James Shade
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -26,23 +26,23 @@ class TimeSpec extends WordSpec with Matchers {
     }
 
     "throw an InvalidTimeException if the hour is less than zero" in {
-      assertException(evaluating(Time(-1, 0, 0, 0)) should produce [InvalidTimeException], -1, 0, 0, 0)
-      assertException(evaluating(Time(-100, 0, 0, 0)) should produce [InvalidTimeException], -100, 0, 0, 0)
+      assertException(the [InvalidTimeException] thrownBy Time(-1, 0, 0, 0), -1, 0, 0, 0)
+      assertException(the [InvalidTimeException] thrownBy Time(-100, 0, 0, 0), -100, 0, 0, 0)
     }
 
     "throw an InvalidTimeException if the minute is less than zero" in {
-      assertException(evaluating(Time(0, -1, 0, 0)) should produce [InvalidTimeException], 0, -1, 0, 0)
-      assertException(evaluating(Time(0, -100, 0, 0)) should produce [InvalidTimeException], 0, -100, 0, 0)
+      assertException(the [InvalidTimeException] thrownBy Time(0, -1, 0, 0), 0, -1, 0, 0)
+      assertException(the [InvalidTimeException] thrownBy Time(0, -100, 0, 0), 0, -100, 0, 0)
     }
 
     "throw an InvalidTimeException if the second is less than zero" in {
-      assertException(evaluating(Time(0, 0, -1, 0)) should produce [InvalidTimeException], 0, 0, -1, 0)
-      assertException(evaluating(Time(0, 0, -100, 0)) should produce [InvalidTimeException], 0, 0, -100, 0)
+      assertException(the [InvalidTimeException] thrownBy Time(0, 0, -1, 0), 0, 0, -1, 0)
+      assertException(the [InvalidTimeException] thrownBy Time(0, 0, -100, 0), 0, 0, -100, 0)
     }
 
     "throw an InvalidTimeException if the millisecond is less than zero" in {
-      assertException(evaluating(Time(0, 0, 0, -1)) should produce [InvalidTimeException], 0, 0, 0, -1)
-      assertException(evaluating(Time(0, 0, 0, -100)) should produce [InvalidTimeException], 0, 0, 0, -100)
+      assertException(the [InvalidTimeException] thrownBy Time(0, 0, 0, -1), 0, 0, 0, -1)
+      assertException(the [InvalidTimeException] thrownBy Time(0, 0, 0, -100), 0, 0, 0, -100)
     }
 
     "return a Time object if all values are set to their maximum legal values" in {
@@ -50,23 +50,23 @@ class TimeSpec extends WordSpec with Matchers {
     }
 
     "throw an InvalidTimeException if the hour is greater than 23" in {
-      assertException(evaluating(Time(24, 59, 59, 999)) should produce [InvalidTimeException], 24, 59, 59, 999)
-      assertException(evaluating(Time(100, 59, 59, 999)) should produce [InvalidTimeException], 100, 59, 59, 999)
+      assertException(the [InvalidTimeException] thrownBy Time(24, 59, 59, 999), 24, 59, 59, 999)
+      assertException(the [InvalidTimeException] thrownBy Time(100, 59, 59, 999), 100, 59, 59, 999)
     }
 
     "throw an InvalidTimeException if the minute is greater than 59" in {
-      assertException(evaluating(Time(23, 60, 59, 999)) should produce [InvalidTimeException], 23, 60, 59, 999)
-      assertException(evaluating(Time(23, 100, 59, 999)) should produce [InvalidTimeException], 23, 100, 59, 999)
+      assertException(the [InvalidTimeException] thrownBy Time(23, 60, 59, 999), 23, 60, 59, 999)
+      assertException(the [InvalidTimeException] thrownBy Time(23, 100, 59, 999), 23, 100, 59, 999)
     }
 
     "throw an InvalidTimeException if the second is greater than 59" in {
-      assertException(evaluating(Time(23, 59, 60, 999)) should produce [InvalidTimeException], 23, 59, 60, 999)
-      assertException(evaluating(Time(23, 59, 100, 999)) should produce [InvalidTimeException], 23, 59, 100, 999)
+      assertException(the [InvalidTimeException] thrownBy Time(23, 59, 60, 999), 23, 59, 60, 999)
+      assertException(the [InvalidTimeException] thrownBy Time(23, 59, 100, 999), 23, 59, 100, 999)
     }
 
     "throw an InvalidTimeException if the millisecond is greater than 999" in {
-      assertException(evaluating(Time(23, 59, 59, 1000)) should produce [InvalidTimeException], 23, 59, 59, 1000)
-      assertException(evaluating(Time(23, 59, 59, 100000)) should produce [InvalidTimeException], 23, 59, 59, 100000)
+      assertException(the [InvalidTimeException] thrownBy Time(23, 59, 59, 1000), 23, 59, 59, 1000)
+      assertException(the [InvalidTimeException] thrownBy Time(23, 59, 59, 100000), 23, 59, 59, 100000)
     }
 
     "return a Time object with the correct values for valid times of day" in {

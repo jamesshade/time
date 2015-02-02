@@ -1,5 +1,5 @@
 /*
- *  Copyright 2013 James Shade
+ *  Copyright 2013-2015 James Shade
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -59,94 +59,94 @@ class DateSpec extends WordSpec with Matchers with MockitoSugar {
 
     "throw an InvalidDateException if the day number is less than 1" in {
       Date(2013, 6, 1).day shouldBe 1
-      evaluating(Date(2013, 6, 0)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 6, 0)
 
       Date(1985, 2, 1).day shouldBe 1
-      evaluating(Date(1985, 2, -1)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(1985, 2, -1)
 
       Date(23, 12, 1).day shouldBe 1
-      evaluating(Date(23, 12, -1000)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(23, 12, -1000)
 
       Date(-2333, 6, 1).day shouldBe 1
-      evaluating(Date(-2333, 6, -23)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(-2333, 6, -23)
     }
 
     "throw an InvalidDateException if the day number is invalid for the month" in {
 
       Date(2013, 1, 31).day shouldBe 31
-      evaluating(Date(2013, 1, 32)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 1, 32)
 
       Date(2013, 2, 28).day shouldBe 28
-      evaluating(Date(2013, 2, 29)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 2, 29)
 
       Date(2013, 3, 31).day shouldBe 31
-      evaluating(Date(2013, 3, 32)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 3, 32)
 
       Date(2013, 4, 30).day shouldBe 30
-      evaluating(Date(2013, 4, 31)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 4, 31)
 
       Date(2013, 5, 31).day shouldBe 31
-      evaluating(Date(2013, 5, 32)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 5, 32)
 
       Date(2013, 6, 30).day shouldBe 30
-      evaluating(Date(2013, 6, 31)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 6, 31)
 
       Date(2013, 7, 31).day shouldBe 31
-      evaluating(Date(2013, 7, 32)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 7, 32)
 
       Date(2013, 8, 31).day shouldBe 31
-      evaluating(Date(2013, 8, 32)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 8, 32)
 
       Date(2013, 9, 30).day shouldBe 30
-      evaluating(Date(2013, 9, 31)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 9, 31)
 
       Date(2013, 10, 31).day shouldBe 31
-      evaluating(Date(2013, 10, 32)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 10, 32)
 
       Date(2013, 11, 30).day shouldBe 30
-      evaluating(Date(2013, 11, 31)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 11, 31)
 
       Date(2013, 12, 31).day shouldBe 31
-      evaluating(Date(2013, 12, 32)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 12, 32)
     }
 
     "throw an InvalidDateException if the day number is invalid for February" in {
 
       Date(2013, 2, 28).day shouldBe 28
-      evaluating(Date(2013, 2, 29)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 2, 29)
 
       Date(2014, 2, 28).day shouldBe 28
-      evaluating(Date(2014, 2, 29)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2014, 2, 29)
 
       Date(2015, 2, 28).day shouldBe 28
-      evaluating(Date(2015, 2, 29)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2015, 2, 29)
 
       Date(2016, 2, 29).day shouldBe 29
-      evaluating(Date(2016, 2, 30)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2016, 2, 30)
 
       Date(1948, 2, 29).day shouldBe 29
-      evaluating(Date(1948, 2, 30)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(1948, 2, 30)
 
       Date(1996, 2, 29).day shouldBe 29
-      evaluating(Date(1996, 2, 30)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(1996, 2, 30)
 
       Date(2000, 2, 29).day shouldBe 29
-      evaluating(Date(2000, 2, 30)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2000, 2, 30)
 
       Date(1896, 2, 29).day shouldBe 29
-      evaluating(Date(1896, 2, 30)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(1896, 2, 30)
 
       Date(1900, 2, 28).day shouldBe 28
-      evaluating(Date(1900, 2, 29)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(1900, 2, 29)
     }
 
     "throw an InvalidDateException if the month is not in the range 1 to 12" in {
 
-      evaluating(Date(2013, 0, 1)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 0, 1)
 
-      evaluating(Date(2013, -1, 1)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, -1, 1)
 
-      evaluating(Date(2013, -432, 1)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, -432, 1)
 
       Date(2013, 1, 1).month shouldBe 1
       Date(2013, 2, 1).month shouldBe 2
@@ -161,11 +161,11 @@ class DateSpec extends WordSpec with Matchers with MockitoSugar {
       Date(2013, 11, 1).month shouldBe 11
       Date(2013, 12, 1).month shouldBe 12
 
-      evaluating(Date(2013, 13, 1)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 13, 1)
 
-      evaluating(Date(2013, 14, 1)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 14, 1)
 
-      evaluating(Date(2013, 432, 1)) should produce[InvalidDateException]
+      an [InvalidDateException] should be thrownBy Date(2013, 432, 1)
     }
   }
 }
