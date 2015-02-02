@@ -15,6 +15,8 @@
  */
 package org.shade.time
 
+import scala.language.implicitConversions
+
 import org.joda.time._
 
 object Conversions {

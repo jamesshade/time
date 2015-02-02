@@ -8,7 +8,7 @@ scalaVersion := "2.11.2"
 
 crossScalaVersions := Seq("2.11.2", "2.10.4")
 
-scalacOptions ++= Seq("-deprecation")
+scalacOptions ++= Seq("-unchecked", "-feature", "-deprecation")
 
 resolvers ++= Seq(
   Resolver.mavenLocal,
