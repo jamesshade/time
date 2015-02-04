@@ -15,13 +15,12 @@
  */
 package org.shade.time
 
-import org.joda.time.{DateTime, DateTimeZone}
 import org.joda.time.chrono.ISOChronology
-import org.shade.Assertions._
+import org.joda.time.{DateTime, DateTimeZone}
 
 case class Zone(id: String) {
 
-  notNull("id" -> id)
+  if (id == null) throw new NullPointerException("Time zone id is null")
 
   private[time] val joda = try {
     DateTimeZone.forID(id)

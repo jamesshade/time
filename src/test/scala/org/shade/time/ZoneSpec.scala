@@ -48,7 +48,7 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
     "throw a NullPointerException if the Zone is null" in {
       val str: String = null
       val thrown = the [NullPointerException] thrownBy Zone(str)
-      thrown.getMessage shouldBe "Parameter 'id' is null"
+      thrown.getMessage shouldBe "Time zone id is null"
     }
 
     "throw an InvalidZoneException if the Zone is empty" in {
