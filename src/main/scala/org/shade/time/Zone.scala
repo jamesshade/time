@@ -72,7 +72,7 @@ case class Zone(id: String) {
 }
 
 object Zone {
-  val utc = Zone("UTC")
+  val UTC = Zone("UTC")
 }
 
 case class InvalidZoneException(id: String, message: String, cause: Throwable = null) extends TimeException(s"Unknown/invalid time zone '$id': $message", cause)

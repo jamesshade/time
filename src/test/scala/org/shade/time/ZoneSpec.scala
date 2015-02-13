@@ -23,7 +23,7 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
 
   private val london = Zone("Europe/London")
   private val addisAbaba = Zone("Africa/Addis_Ababa")
-  private val utc = Zone.utc
+  private val utc = Zone.UTC
   private val stockholm = Zone("Europe/Stockholm")
   private val sydney = Zone("Australia/Sydney")
   private val honolulu = Zone("Pacific/Honolulu")
@@ -339,10 +339,10 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
     }
   }
 
-  "Requesting utc from the Zone object" should {
+  "Requesting UTC from the Zone object" should {
     "Return a Zone containing UTC" in {
-      Zone.utc.id shouldBe "UTC"
-      Zone.utc.joda shouldBe DateTimeZone.UTC
+      Zone.UTC.id shouldBe "UTC"
+      Zone.UTC.joda shouldBe DateTimeZone.UTC
     }
   }
 
