@@ -1,5 +1,5 @@
-Simple Time
-===========
+Simple Time for Scala
+=====================
 
 This library provides a highly simplified set of Date and Time classes for Scala.
 
