@@ -73,6 +73,7 @@ case class Zone(id: String) {
 
 object Zone {
   val UTC = Zone("UTC")
+  val System = Zone(DateTimeZone.getDefault.getID)
 }
 
 case class InvalidZoneException(id: String, message: String, cause: Throwable = null) extends TimeException(s"Unknown/invalid time zone '$id': $message", cause)

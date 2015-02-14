@@ -15,9 +15,9 @@
  */
 package org.shade.time
 
-import org.scalatest.{Matchers, WordSpec}
-import org.scalatest.mock.MockitoSugar
 import org.joda.time.{DateTime, DateTimeZone}
+import org.scalatest.mock.MockitoSugar
+import org.scalatest.{Matchers, WordSpec}
 
 class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
 
@@ -346,5 +346,10 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
     }
   }
 
+  "The system time zone provided by the Zone object" should {
 
+    "be the current default (Joda) system time zone" in {
+      Zone.System.id shouldBe DateTimeZone.getDefault.getID
+    }
+  }
 }
