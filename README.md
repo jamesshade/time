@@ -1,7 +1,6 @@
-Simple Time for Scala
-=====================
+# Simple Time for Scala
 
-This library provides a highly simplified set of Date and Time classes for Scala.
+This library provides a simplified set of Date and Time classes for Scala.
 
 It provides a very thin wrapper around Joda Time (http://www.joda.org/joda-time), and relies on Joda Time for 
 handling all the complexity of Date and Time processing.
@@ -12,7 +11,13 @@ The intention of the library is two-fold:
 
 2. Reduce chronology and time zone related confusion and bugs.
 
-The primary classes are:
+## Contents
+
+* [Primary Classes](#primary-classes)
+* [Intention 1 - Scala Friendly Time Handling](#intention-1---scala-friendly-time-handling)
+* [Intention 2 - Reducing time zone and chronology related confusion](#intention-2---reducing-time-zone-and-chronology-related-confusion)
+
+## Primary Classes
 
 * Instant - An instant in time - similar to a Joda ReadableInstant and its subclasses (e.g. DateTime) or a JDK Date.  
   This has no concept of chronology or time zone.
@@ -30,7 +35,12 @@ The primary classes are:
 * Clock - Something that can provide the current time and date.  This is a trait, with a single concrete 
   implementation "SystemClock".
 
-The first intention, making time-handling Scala friendly, is supported by:
+* Duration - A length of time, wraps a Long representing a number of milliseconds - similar to Joda's Duration.  Note
+  that for the purposes of time arithmetic, Durations are directed (i.e. a Duration can be negative).
+
+## Intention 1 - Scala Friendly Time Handling
+
+This is supported by:
 
 * Representing Instant as a case class containing a Long - milliseconds since the Epoch UTC.
 
@@ -42,7 +52,9 @@ The first intention, making time-handling Scala friendly, is supported by:
 * Having a standard "equals" method that does the right thing - i.e. if two objects represent the same thing, they 
   are equal (no Joda-style "equals" and "isEqual" methods that return different values).
 
-The second intention, reducing time zone and chronology related confusion, is more tricky.  But some points are:
+## Intention 2 - Reducing time zone and chronology related confusion
+
+This is more tricky.  But some points are:
 
 * Instant has no concept of chronology or time zone.  Two Instants are equal if they refer to the same point in time
   (unlike Joda instants, which embed a chronology and time zone and have an equals method that often returns "false" 
@@ -59,3 +71,4 @@ The second intention, reducing time zone and chronology related confusion, is mo
 * Any conversions or calculations that are time zone dependent require the zone to be provided and are generally 
   methods on the Zone class.  There is no "default" or "local" time zone to confuse things - the developer must 
   be specific.
+
