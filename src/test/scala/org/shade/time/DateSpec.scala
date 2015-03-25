@@ -168,4 +168,52 @@ class DateSpec extends WordSpec with Matchers with MockitoSugar {
       an [InvalidDateException] should be thrownBy Date(2013, 432, 1)
     }
   }
+
+  "Parsing a Date" should {
+
+    "return the Date if the string is valid (as per Joda LocalDate.parse" in {
+      Date.parse("2014-11-12") shouldBe Date(2014, 11, 12)
+      Date.parse("2011-02-22") shouldBe Date(2011, 2, 22)
+      Date.parse("0001-01-01") shouldBe Date(1, 1, 1)
+      Date.parse("2220-02-29") shouldBe Date(2220, 2, 29)
+      Date.parse("11111-12-31") shouldBe Date(11111, 12, 31)
+      Date.parse("1-12-31") shouldBe Date(1, 12, 31)
+      Date.parse("-1000-12-31") shouldBe Date(-1000, 12, 31)
+    }
+
+    "always work if the string was created by the toString method" in {
+
+      def test(date: Date) = Date.parse(date.toString) shouldBe date
+
+      test(Date(2014, 11, 22))
+      test(Date(-5000, 1, 22))
+      test(Date(2000, 2, 29))
+      test(Date(100000, 12, 31))
+    }
+
+    "throw a parse exception if the string is null, empty or blank" in {
+      a [DateParseException] should be thrownBy Date.parse(null)
+      a [DateParseException] should be thrownBy Date.parse("")
+      a [DateParseException] should be thrownBy Date.parse("   ")
+    }
+
+    "throw a parse exception if the string is malformed" in {
+      a [DateParseException] should be thrownBy Date.parse("abc")
+      a [DateParseException] should be thrownBy Date.parse("aaaa-bb-cc")
+      a [DateParseException] should be thrownBy Date.parse("   2011-02-22  ")
+      a [DateParseException] should be thrownBy Date.parse("   2011 - 02 - 22  ")
+      a [DateParseException] should be thrownBy Date.parse(" 2011-02-22")
+      a [DateParseException] should be thrownBy Date.parse("2011-02-22  ")
+      a [DateParseException] should be thrownBy Date.parse("2011/02/22")
+      a [DateParseException] should be thrownBy Date.parse("11 Mar 2015")
+    }
+
+    "throw a parse exception if the string is formatted correctly but doesn't represent a valid date" in {
+      a [DateParseException] should be thrownBy Date.parse("2016-00-01")
+      a [DateParseException] should be thrownBy Date.parse("2016-13-01")
+      a [DateParseException] should be thrownBy Date.parse("2016-01-00")
+      a [DateParseException] should be thrownBy Date.parse("2016-01-32")
+      a [DateParseException] should be thrownBy Date.parse("2001-02-29")
+    }
+  }
 }

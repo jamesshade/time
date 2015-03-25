@@ -36,7 +36,6 @@ case class Instant(millis: Long) extends Comparable[Instant] {
   def isAfter(instant: Instant) = millis > instant.millis
   val > = isAfter _
 
-
   def timeUntil(futureInstant: Instant) = Duration(futureInstant.millis - millis)
   def timeSince(pastInstant: Instant) = Duration(millis - pastInstant.millis)
   def timeBetween(otherInstant: Instant) = timeSince(otherInstant).abs
@@ -47,3 +46,19 @@ case class Instant(millis: Long) extends Comparable[Instant] {
 
   override def compareTo(o: Instant): Int = millis.compareTo(o.millis)
 }
+
+object Instant {
+
+  private val formatter = ISODateTimeFormat.dateTime().withChronology(IsoUtc)
+
+  def parse(instant: String): Instant = {
+    try {
+      Instant(formatter.parseDateTime(instant).getMillis)
+    } catch {
+      case e: Exception => throw InstantParseException(instant, e)
+    }
+  }
+}
+
+case class InstantParseException(unparsedValue: String, cause: Exception)
+  extends ParseException("Instant", unparsedValue, Option(cause))

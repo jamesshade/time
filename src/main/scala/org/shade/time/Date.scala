@@ -16,6 +16,7 @@
 package org.shade.time
 
 import org.joda.time.LocalDate
+import org.joda.time.format.ISODateTimeFormat
 
 case class Date(year: Int, month: Int, day: Int) {
 
@@ -28,5 +29,20 @@ case class Date(year: Int, month: Int, day: Int) {
   override lazy val toString = "%04d-%02d-%02d".format(year, month, day)
 }
 
-case class InvalidDateException(year: Int, month: Int, day: Int, cause: Throwable)
+object Date {
+
+  def parse(date: String): Date = {
+    try {
+      val localDate = LocalDate.parse(date, ISODateTimeFormat.yearMonthDay().withChronology(IsoUtc))
+      Date(localDate.getYear, localDate.getMonthOfYear, localDate.getDayOfMonth)
+    } catch {
+      case e: Exception => throw DateParseException(date, e)
+    }
+  }
+}
+
+case class InvalidDateException(year: Int, month: Int, day: Int, cause: Exception)
   extends TimeException(s"Invalid ISO date: (Year: $year) (Month: $month) (Day: $day): ${cause.getMessage}", cause)
+
+case class DateParseException(unparsedValue: String, cause: Exception)
+  extends ParseException("Date", unparsedValue, Option(cause))

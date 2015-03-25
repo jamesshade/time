@@ -369,5 +369,81 @@ class InstantSpec extends WordSpec with Matchers with MockitoSugar {
       Instant(1000).compareTo(Instant(-10000)) shouldBe 1
     }
   }
+
+  "The parse method on the Instant object" should {
+
+    "Correctly parse valid date/times (as per Joda's ISODateTimeFormat.dateTime)" in {
+
+      Instant.parse("-0928-10-22T00:29:03.087Z") shouldBe Instant(-91426577456913L)
+      Instant.parse("1924-10-17T16:29:03.087Z") shouldBe Instant(-1426577456913L)
+      Instant.parse("1927-11-03T16:29:03.087Z") shouldBe Instant(-1330500656913L)
+      Instant.parse("1969-12-31T11:56:04.655Z") shouldBe Instant(-43435345L)
+      Instant.parse("1969-12-31T23:59:59.999Z") shouldBe Instant(-1L)
+      Instant.parse("1970-01-01T00:00:00.000Z") shouldBe Instant(0L)
+      Instant.parse("1970-01-01T00:00:00.001Z") shouldBe Instant(1L)
+      Instant.parse("1970-01-01T12:03:55.345Z") shouldBe Instant(43435345L)
+      Instant.parse("2012-02-29T07:30:56.913Z") shouldBe Instant(1330500656913L)
+      Instant.parse("2015-03-17T07:30:56.913Z") shouldBe Instant(1426577456913L)
+      Instant.parse("4867-03-11T23:30:56.913Z") shouldBe Instant(91426577456913L)
+    }
+
+    "Be lenient on the lengths of the numbers as long as they are valid" in {
+      Instant.parse("196-1-3T2:9:5.9Z") shouldBe Instant(-55981835454100L)
+      Instant.parse("19693-1-3T2:9:5.9Z") shouldBe Instant(559284142145900L)
+    }
+
+    "Correctly interpret UTC offsets" in {
+      Instant.parse("2015-03-29T00:00:00.000+00:00") shouldBe Instant(1427587200000L)
+      Instant.parse("2015-03-29T00:00:00.000-00:00") shouldBe Instant(1427587200000L)
+      Instant.parse("2015-03-29T00:00:00.000+01:00") shouldBe Instant(1427583600000L)
+      Instant.parse("2015-03-29T00:00:00.000-07:00") shouldBe Instant(1427612400000L)
+      Instant.parse("2015-03-29T00:00:00.000+05:30") shouldBe Instant(1427567400000L)
+    }
+
+    "Correctly parse any timestamp string created with the Instant.toString method" in {
+
+      def test(ms: Long) = Instant.parse(Instant(ms).toString) shouldBe Instant(ms)
+
+      test(-91426577456913L)
+      test(-1426577456913L)
+      test(-43435345L)
+      test(-1L)
+      test(0L)
+      test(1L)
+      test(43435345L)
+      test(1426577456913L)
+      test(91426577456913L)
+    }
+
+    "Throw an InstantParseException if the string is null, empty or blank" in {
+      an [InstantParseException] should be thrownBy Instant.parse(null)
+      an [InstantParseException] should be thrownBy Instant.parse("")
+      an [InstantParseException] should be thrownBy Instant.parse("    ")
+    }
+
+    "Throw an InstantParseException if the string is malformed" in {
+      an [InstantParseException] should be thrownBy Instant.parse("abc")
+      an [InstantParseException] should be thrownBy Instant.parse("2015-03-17T07:30:56.913Y")
+      an [InstantParseException] should be thrownBy Instant.parse("2015-0b-17T07:30:56.913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2015-03-17T07:30:56:913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2015/03/17T07:30:56:913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2015-03-17T07-30-56-913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("   2015-03-17T07:30:56.913Z  ")
+      an [InstantParseException] should be thrownBy Instant.parse("2015-03-17T07:30:56.913")
+    }
+
+    "Throw an InstantParseException if the instant is correctly formatted but doesn't represent a valid instant" in {
+      an [InstantParseException] should be thrownBy Instant.parse("2015-13-17T07:30:56.913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2015--1-17T07:30:56.913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2015-03-32T07:30:56.913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2015-03-00T07:30:56.913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2015-02-29T07:30:56.913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2012-02-30T07:30:56.913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2012-02-15T24:00:00:000Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2012-02-30T23:60:00:000Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2012-02-30T07:30:60.913Z")
+      an [InstantParseException] should be thrownBy Instant.parse("2012-02-30T07:30:56.1000Z")
+    }
+  }
 }
 
