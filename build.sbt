@@ -24,6 +24,12 @@ libraryDependencies ++= Seq(
   "org.mockito" % "mockito-all" % "1.9.0" % "test" withSources() withJavadoc()
 )
 
-bintraySettings
+import bintray.Keys._
+
+bintraySettings ++ Seq(
+  bintrayOrganization in bintray := Some("jamesshade"),
+  repository in bintray := "releases"
+)
+
 
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
