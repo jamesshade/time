@@ -1,5 +1,7 @@
 # Simple Time for Scala
 
+[ ![Download](https://api.bintray.com/packages/jamesshade/releases/time/images/download.svg) ](https://bintray.com/jamesshade/releases/time/_latestVersion)
+
 This library provides a simplified set of Date and Time classes for Scala.
 
 It provides a very thin wrapper around Joda Time (http://www.joda.org/joda-time), and relies on Joda Time for 
@@ -16,6 +18,7 @@ The intention of the library is two-fold:
 * [Primary Classes](#primary-classes)
 * [Intention 1 - Scala Friendly Time Handling](#intention-1---scala-friendly-time-handling)
 * [Intention 2 - Reducing time zone and chronology related confusion](#intention-2---reducing-time-zone-and-chronology-related-confusion)
+
 
 ## Primary Classes
 
