@@ -17,31 +17,9 @@ package org.shade.time
 
 import scala.language.implicitConversions
 
-import org.joda.time._
-
 object Conversions {
 
   implicit def instantToLong(instant: Instant): Long = instant.millis
 
   implicit def instantFromLong(instant: Long): Instant = Instant(instant)
-
-  implicit def instantToJoda(instant: Instant): DateTime = new DateTime(instant.millis, IsoUtc)
-
-  implicit def instantFromJoda(instant: ReadableInstant): Instant = Instant(instant.getMillis)
-
-  implicit def dateToJoda(date: Date): LocalDate = new LocalDate(date.year, date.month, date.day, IsoUtc)
-
-  implicit def dateFromJoda(joda: LocalDate): Date = {
-
-    val date = if (joda.getChronology == IsoUtc) joda else {
-      val jodaDateTime = new DateTime(joda.toDateTimeAtStartOfDay(DateTimeZone.UTC).plusHours(12).getMillis, IsoUtc)
-      new LocalDate(jodaDateTime, IsoUtc)
-    }
-
-    Date(date.getYear, date.getMonthOfYear, date.getDayOfMonth)
-  }
-
-  implicit def zoneToJoda(zone: Zone): DateTimeZone = zone.joda
-
-  implicit def zoneFromJoda(joda: DateTimeZone): Zone = Zone(joda.getID)
 }

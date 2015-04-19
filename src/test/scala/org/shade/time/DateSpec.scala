@@ -50,8 +50,8 @@ class DateSpec extends WordSpec with Matchers with MockitoSugar {
     }
 
     "return the date in the correct format for very large years" in {
-      Date(11111, 12, 2).toString shouldBe "11111-12-02"
-      Date(45435535, 8, 6).toString shouldBe "45435535-08-06"
+      Date(11111, 12, 2).toString shouldBe "+11111-12-02"
+      Date(45435535, 8, 6).toString shouldBe "+45435535-08-06"
     }
   }
 
@@ -171,13 +171,13 @@ class DateSpec extends WordSpec with Matchers with MockitoSugar {
 
   "Parsing a Date" should {
 
-    "return the Date if the string is valid (as per Joda LocalDate.parse" in {
+    "return the Date if the string is valid" in {
       Date.parse("2014-11-12") shouldBe Date(2014, 11, 12)
       Date.parse("2011-02-22") shouldBe Date(2011, 2, 22)
       Date.parse("0001-01-01") shouldBe Date(1, 1, 1)
       Date.parse("2220-02-29") shouldBe Date(2220, 2, 29)
-      Date.parse("11111-12-31") shouldBe Date(11111, 12, 31)
-      Date.parse("1-12-31") shouldBe Date(1, 12, 31)
+//      TODO [JJS] Not valid with JDK - Date.parse("11111-12-31") shouldBe Date(11111, 12, 31)
+//      TODO [JJS] Not valid with JDK - Date.parse("1-12-31") shouldBe Date(1, 12, 31)
       Date.parse("-1000-12-31") shouldBe Date(-1000, 12, 31)
     }
 

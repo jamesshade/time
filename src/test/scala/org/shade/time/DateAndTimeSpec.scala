@@ -182,7 +182,7 @@ class DateAndTimeSpec extends WordSpec with Matchers {
       DateAndTime(0, 1, 2, 1, 3, 4, 5).toString shouldBe "0000-01-02T01:03:04.005"
       DateAndTime(1970, 8, 31, 16, 25, 12, 13).toString shouldBe "1970-08-31T16:25:12.013"
       DateAndTime(1985, 3, 22, 23, 59, 59, 999).toString shouldBe "1985-03-22T23:59:59.999"
-      DateAndTime(12345, 3, 22, 23, 59, 59, 999).toString shouldBe "12345-03-22T23:59:59.999"
+      DateAndTime(12345, 3, 22, 23, 59, 59, 999).toString shouldBe "+12345-03-22T23:59:59.999"
     }
   }
 

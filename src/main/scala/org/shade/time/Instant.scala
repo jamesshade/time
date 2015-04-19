@@ -15,12 +15,9 @@
  */
 package org.shade.time
 
-import org.joda.time.DateTime
-import org.joda.time.format.ISODateTimeFormat
-
 case class Instant(millis: Long) extends Comparable[Instant] {
 
-  override lazy val toString = ISODateTimeFormat.dateTime.print(new DateTime(millis, IsoUtc))
+  override lazy val toString = JavaConversions.instantToJava(this).toString
 
   def isBefore(instant: Instant) = millis < instant.millis
   val < = isBefore _
@@ -49,11 +46,9 @@ case class Instant(millis: Long) extends Comparable[Instant] {
 
 object Instant {
 
-  private val formatter = ISODateTimeFormat.dateTime().withChronology(IsoUtc)
-
   def parse(instant: String): Instant = {
     try {
-      Instant(formatter.parseDateTime(instant).getMillis)
+      JavaConversions.instantFromJava(java.time.Instant.parse(instant))
     } catch {
       case e: Exception => throw InstantParseException(instant, e)
     }

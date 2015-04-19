@@ -15,17 +15,18 @@
  */
 package org.shade.time
 
-import org.joda.time.chrono.ISOChronology
-import org.joda.time.{DateTime, DateTimeZone}
+import java.time.{DateTimeException, ZonedDateTime, ZoneId}
+
+// TODO [JJS] The Java 8 String zone IDs are different to either Joda DateTimeZone or java.util.TimeZone - this breaks backward compatibility
 
 case class Zone(id: String) {
 
   if (id == null) throw new NullPointerException("Time zone id is null")
 
-  private[time] val joda = try {
-    DateTimeZone.forID(id)
+  private[time] val zoneId = try {
+    ZoneId.of(id)
   } catch {
-    case e: IllegalArgumentException => throw new InvalidZoneException(id, e.getMessage, e)
+    case e: DateTimeException => throw new InvalidZoneException(id, e.getMessage, e)
   }
 
   override lazy val toString: String = id
@@ -40,7 +41,7 @@ case class Zone(id: String) {
   
   def apply(date: Date, time: Time): Instant = {
     try {
-      Instant(new DateTime(date.year, date.month, date.day, time.hour, time.minute, time.second, time.millisecond, ISOChronology.getInstance(joda)).getMillis)
+      JavaConversions.instantFromJava(ZonedDateTime.of(date.year, date.month, date.day, time.hour, time.minute, time.second, time.millisecond * 1000 * 1000, zoneId).toInstant)
     } catch {
       case cause: Exception => throw new InvalidTimeInZoneException(date.year, date.month, date.day, time.hour, time.minute, time.second, time.millisecond, this, cause)
     }
@@ -55,16 +56,16 @@ case class Zone(id: String) {
 
   def dateAndTimeOf(instant: Instant): DateAndTime  = {
 
-    val jodaInZone = new DateTime(instant.millis, ISOChronology.getInstance(joda))
+    val jdkInZone = ZonedDateTime.ofInstant(JavaConversions.instantToJava(instant), zoneId)
 
     DateAndTime(
-      jodaInZone.getYear,
-      jodaInZone.getMonthOfYear,
-      jodaInZone.getDayOfMonth,
-      jodaInZone.getHourOfDay,
-      jodaInZone.getMinuteOfHour,
-      jodaInZone.getSecondOfMinute,
-      jodaInZone.getMillisOfSecond)
+      jdkInZone.getYear,
+      jdkInZone.getMonthValue,
+      jdkInZone.getDayOfMonth,
+      jdkInZone.getHour,
+      jdkInZone.getMinute,
+      jdkInZone.getSecond,
+      jdkInZone.getNano / 1000000)
   }
 
   def dateOf(instant: Instant): Date = dateAndTimeOf(instant).date
@@ -73,7 +74,7 @@ case class Zone(id: String) {
 
 object Zone {
   val UTC = Zone("UTC")
-  val System = Zone(DateTimeZone.getDefault.getID)
+  val System = Zone(ZoneId.systemDefault.getId)
 }
 
 case class InvalidZoneException(id: String, message: String, cause: Throwable = null) extends TimeException(s"Unknown/invalid time zone '$id': $message", cause)

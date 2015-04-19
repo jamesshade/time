@@ -15,26 +15,29 @@
  */
 package org.shade.time
 
-import org.joda.time.LocalDate
-import org.joda.time.format.ISODateTimeFormat
+import java.time.format.DateTimeParseException
+import java.time.{DateTimeException, LocalDate}
 
 case class Date(year: Int, month: Int, day: Int) {
 
   try {
-    new LocalDate(year, month, day, IsoUtc)
+    LocalDate.of(year, month, day)
   } catch {
-    case e: Exception => throw InvalidDateException(year, month, day, e)
+    case e: DateTimeException => throw InvalidDateException(year, month, day, e)
   }
 
-  override lazy val toString = "%04d-%02d-%02d".format(year, month, day)
+  override lazy val toString = {
+    val plus = if (year >= 10000) "+" else ""
+    "%s%04d-%02d-%02d".format(plus, year, month, day)
+  }
 }
 
 object Date {
 
   def parse(date: String): Date = {
     try {
-      val localDate = LocalDate.parse(date, ISODateTimeFormat.yearMonthDay().withChronology(IsoUtc))
-      Date(localDate.getYear, localDate.getMonthOfYear, localDate.getDayOfMonth)
+      val localDate = LocalDate.parse(date)
+      Date(localDate.getYear, localDate.getMonthValue, localDate.getDayOfMonth)
     } catch {
       case e: Exception => throw DateParseException(date, e)
     }

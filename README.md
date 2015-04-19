@@ -4,8 +4,12 @@
 
 This library provides a simplified set of Date and Time classes for Scala.
 
-It provides a very thin wrapper around Joda Time (http://www.joda.org/joda-time), and relies on Joda Time for 
+It provides a very thin layer on top of the Java 8 time library (https://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html#package.description), and relies on the JDK classes for 
 handling all the complexity of Date and Time processing.
+
+__Note that this branch (jdk1.8) is an experimental work in progress, and is a simple port of the master Joda version to use the new Java 8 classes.__
+
+__It's early days with this and the library may change significantly before this Java 8 version is released.__
 
 The intention of the library is two-fold:
 
@@ -22,23 +26,22 @@ The intention of the library is two-fold:
 
 ## Primary Classes
 
-* Instant - An instant in time - similar to a Joda ReadableInstant and its subclasses (e.g. DateTime) or a JDK Date.  
-  This has no concept of chronology or time zone.
+* Instant - An instant in time - similar to a JDK Instant.
   
 * Date - A date in the calendar with no concept of time of day or time zone (i.e. it is a day, a month and a year) -
-  similar to Joda's LocalDate.  There's no direct JDK "pure" date class.
+  similar to the JDK LocalDate class.
   
 * Time - A time of day with no concept of date or time zone (i.e. it is an hour, minute, second and millisecond) -
-  similar to Joda's LocalTime.  There's no direct JDK "pure" time-of-day class.
+  similar to the JDK LocalTime class.
   
-* DateAndTime - A combination of Date and Time into a single case class - similar to Joda's LocalDateTime.
+* DateAndTime - A combination of Date and Time into a single case class - similar to the JDK LocalDateTime class.
 
-* Zone - A time zone - wraps a Joda DateTimeZone, similar to the JDK's TimeZone class.
+* Zone - A time zone - wraps a JDK ZoneId.
 
 * Clock - Something that can provide the current time and date.  This is a trait, with a single concrete 
-  implementation "SystemClock".
+  implementation "SystemClock".  Similar to a JDK Clock.
 
-* Duration - A length of time, wraps a Long representing a number of milliseconds - similar to Joda's Duration.  Note
+* Duration - A length of time, wraps a Long representing a number of milliseconds - similar to a JDK Duration.  Note
   that for the purposes of time arithmetic, Durations are directed (i.e. a Duration can be negative).
 
 ## Intention 1 - Scala Friendly Time Handling
@@ -49,8 +52,8 @@ This is supported by:
 
 * Representing partial classes (e.g. Date) as case classes containing simple integer values.
 
-* Avoiding cluttering these classes with unnecessary concerns.  For example, conversion to Joda is provided in a 
-  separate Conversions object (JDK conversions perhaps to follow).
+* Avoiding cluttering these classes with unnecessary concerns.  For example, conversion to JDK classes is provided in a 
+  separate JavaConversions object.
 
 * Having a standard "equals" method that does the right thing - i.e. if two objects represent the same thing, they 
   are equal (no Joda-style "equals" and "isEqual" methods that return different values).

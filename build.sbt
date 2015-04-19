@@ -2,13 +2,18 @@ organization := "org.shade"
 
 name := "time"
 
-version := "1.1.0-SNAPSHOT"
+version := "2.0.0-SNAPSHOT"
 
 scalaVersion := "2.11.6"
 
 crossScalaVersions := Seq("2.11.6", "2.10.5")
 
-scalacOptions ++= Seq("-unchecked", "-feature", "-deprecation")
+scalacOptions ++= Seq(
+  "-unchecked",
+  "-feature",
+  "-deprecation",
+  "-target:jvm-1.8"
+)
 
 resolvers ++= Seq(
   Resolver.mavenLocal,
@@ -17,9 +22,6 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "joda-time" % "joda-time" % "2.2" withSources() withJavadoc(),
-  "org.joda" % "joda-convert" % "1.3.1" withSources() withJavadoc(),
-  //
   "org.scalatest" %% "scalatest" % "2.2.4" % "test" withSources() withJavadoc(),
   "org.mockito" % "mockito-all" % "1.9.0" % "test" withSources() withJavadoc()
 )
