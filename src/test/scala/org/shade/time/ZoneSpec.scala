@@ -134,6 +134,10 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
     "throw an InvalidTimeInZone exception if the time is invalid due to daylight savings time changes in a given zone" in {
       an [InvalidTimeInZoneException] should be thrownBy london(2013, 3, 31, 1, 30, 25, 222)
     }
+
+    "when an ambiguous time is created because of clocks going back, then assume that the first of the two valid values is correct" in {
+      london(2013, 10, 27, 1, 30, 25, 222) shouldBe utc(2013, 10, 27, 0, 30, 25, 222)
+    }
   }
 
   "The Zone instance apply method taking a DateAndTime object" should {
@@ -265,6 +269,11 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
       sydney.dateAndTimeOf(instant) should equal(DateAndTime(1977, 3, 21, 9, 0, 0, 0))
       honolulu.dateAndTimeOf(instant) should equal(DateAndTime(1977, 3, 20, 13, 0, 0, 0))
     }
+
+    "when the clocks go back, correctly convert instants one hour apart to the same date and time" in {
+      london.dateAndTimeOf(utc(2013, 10, 27, 0, 30, 25, 222)) shouldBe DateAndTime(2013, 10, 27, 1, 30, 25, 222)
+      london.dateAndTimeOf(utc(2013, 10, 27, 1, 30, 25, 222)) shouldBe DateAndTime(2013, 10, 27, 1, 30, 25, 222)
+    }
   }
 
   "The dateOf method" should {
@@ -336,6 +345,11 @@ class ZoneSpec extends WordSpec with Matchers with MockitoSugar {
       stockholm.timeOf(instant) should equal(Time(0, 0, 0, 0))
       sydney.timeOf(instant) should equal(Time(9, 0, 0, 0))
       honolulu.timeOf(instant) should equal(Time(13, 0, 0, 0))
+    }
+
+    "when the clocks go back, correctly convert instants one hour apart to the same time" in {
+      london.timeOf(utc(2013, 10, 27, 0, 30, 25, 222)) shouldBe Time(1, 30, 25, 222)
+      london.timeOf(utc(2013, 10, 27, 1, 30, 25, 222)) shouldBe Time(1, 30, 25, 222)
     }
   }
 
